@@ -10,8 +10,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// No HTTPS redirection: the server is reached over plain HTTP on the LAN
-// (see CLAUDE.md — clients connect to http://<host-ip>:5000).
+// No HTTPS redirection: this is a LAN-only service, reached over plain HTTP at
+// http://<host-ip>:5000.
 
 // Liveness probe: lets a client confirm the server is reachable before issuing real requests.
 // Returns 200 with { "status": "ok" }.

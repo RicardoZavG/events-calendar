@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        Shape tokens: sizes, radii and spacing. These are deliberately kept out of the palette
+        because the layout does not change when the user picks another colour theme — only the
+        colours do.
+    -->
+
+    <!-- Type scale -->
+    <x:Double x:Key="FontSizeMonthTitle">22</x:Double>
+    <x:Double x:Key="FontSizeNavigationIcon">16</x:Double>
+    <x:Double x:Key="FontSizeDayNumber">13</x:Double>
+    <x:Double x:Key="FontSizeWeekdayLabel">12</x:Double>
+
+    <!-- Round controls: the radius is half the size, which is what makes them circular. -->
+    <x:Double x:Key="NavigationButtonSize">34</x:Double>
+    <CornerRadius x:Key="NavigationButtonRadius">17</CornerRadius>
+    <x:Double x:Key="DayBadgeSize">26</x:Double>
+    <CornerRadius x:Key="DayBadgeRadius">13</CornerRadius>
+
+    <!-- Spacing between siblings -->
+    <x:Double x:Key="NavigationButtonSpacing">2</x:Double>
+    <x:Double x:Key="HeaderActionSpacing">8</x:Double>
+    <x:Double x:Key="DayCellSpacing">4</x:Double>
+    <x:Double x:Key="EventChipSpacing">2</x:Double>
+
+    <!-- Padding and margins -->
+    <Thickness x:Key="HeaderMargin">16,12</Thickness>
+    <Thickness x:Key="WeekdayLabelMargin">0,8</Thickness>
+    <Thickness x:Key="DayCellPadding">6,4</Thickness>
+
+    <!--
+        Grid lines. Each cell draws its top and right edge only; the grid draws the remaining
+        left and bottom edge, so adjacent cells never double their border.
+    -->
+    <Thickness x:Key="DayCellBorderThickness">0,1,1,0</Thickness>
+    <Thickness x:Key="MonthGridBorderThickness">1,0,0,1</Thickness>
+
+    <!--
+        Vertical space reserved inside every day cell for the event chips of a later task, so
+        adding real events will not reflow the grid.
+    -->
+    <x:Double x:Key="EventAreaMinHeight">48</x:Double>
+
+</ResourceDictionary>

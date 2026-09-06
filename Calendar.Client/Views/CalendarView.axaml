@@ -5,6 +5,7 @@
              xmlns:sys="using:System"
              xmlns:vm="using:Calendar.Client.ViewModels"
              xmlns:models="using:Calendar.Client.Models"
+             xmlns:res="using:Calendar.Client.Resources"
              mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="680"
              x:Class="Calendar.Client.Views.CalendarView"
              x:DataType="vm:CalendarViewModel">
@@ -13,117 +14,115 @@
         <vm:CalendarViewModel />
     </Design.DataContext>
 
-    <UserControl.Resources>
-        <!-- Design tokens: every colour used below comes from here, never inline. -->
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="GridLineBrush" Color="#E4E7EB" />
-        <SolidColorBrush x:Key="TextBrush" Color="#1F2328" />
-        <SolidColorBrush x:Key="MutedTextBrush" Color="#9AA3AD" />
-        <SolidColorBrush x:Key="AccentBrush" Color="#1A73E8" />
-        <SolidColorBrush x:Key="HoverBrush" Color="#F1F3F4" />
-    </UserControl.Resources>
-
+    <!--
+        No colour, size or text is written literally in this file. Colours and dimensions come
+        from the token dictionaries merged in App.axaml; text comes from Strings.resx.
+    -->
     <UserControl.Styles>
         <!-- Header -->
         <Style Selector="TextBlock.monthTitle">
-            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeMonthTitle}" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style Selector="Button.nav">
-            <Setter Property="Width" Value="34" />
-            <Setter Property="Height" Value="34" />
+            <Setter Property="Width" Value="{DynamicResource NavigationButtonSize}" />
+            <Setter Property="Height" Value="{DynamicResource NavigationButtonSize}" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNavigationIcon}" />
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="CornerRadius" Value="17" />
+            <Setter Property="CornerRadius" Value="{DynamicResource NavigationButtonRadius}" />
         </Style>
         <Style Selector="Button.nav:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{StaticResource HoverBrush}" />
+            <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
         </Style>
 
         <!-- Weekday header row -->
         <Style Selector="TextBlock.weekday">
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0,8" />
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="{DynamicResource WeekdayLabelMargin}" />
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeWeekdayLabel}" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
         </Style>
 
         <!-- Day cells -->
         <Style Selector="Border.dayCell">
-            <Setter Property="BorderBrush" Value="{StaticResource GridLineBrush}" />
-            <Setter Property="BorderThickness" Value="0,1,1,0" />
-            <Setter Property="Padding" Value="6,4" />
+            <Setter Property="BorderBrush" Value="{DynamicResource GridLineBrush}" />
+            <Setter Property="BorderThickness" Value="{DynamicResource DayCellBorderThickness}" />
+            <Setter Property="Padding" Value="{DynamicResource DayCellPadding}" />
         </Style>
         <Style Selector="Border.dayCell:pointerover">
-            <Setter Property="Background" Value="{StaticResource HoverBrush}" />
+            <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
         </Style>
 
         <Style Selector="Border.dayBadge">
-            <Setter Property="Width" Value="26" />
-            <Setter Property="Height" Value="26" />
-            <Setter Property="CornerRadius" Value="13" />
+            <Setter Property="Width" Value="{DynamicResource DayBadgeSize}" />
+            <Setter Property="Height" Value="{DynamicResource DayBadgeSize}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource DayBadgeRadius}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
         <Style Selector="Border.dayBadge.today">
-            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
         </Style>
 
         <Style Selector="TextBlock.dayNumber">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeDayNumber}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         </Style>
         <!-- Days borrowed from the neighbouring months read as secondary. -->
         <Style Selector="Border.dayCell.outside TextBlock.dayNumber">
-            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
         </Style>
         <!-- Today's number sits inside the filled badge, so it inverts. -->
         <Style Selector="Border.dayBadge.today TextBlock.dayNumber">
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource SurfaceBrush}">
+    <Grid RowDefinitions="Auto,Auto,*" Background="{DynamicResource SurfaceBrush}">
 
         <!-- Header: navigation on the left, month title in the middle, jumps on the right -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="16,12">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="{DynamicResource HeaderMargin}">
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
-                <Button Classes="nav" Content="&#x00AB;"
+            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                        Spacing="{DynamicResource NavigationButtonSpacing}"
+                        VerticalAlignment="Center">
+                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_PreviousYear}"
                         Command="{Binding PreviousYearCommand}"
-                        ToolTip.Tip="Año anterior" />
-                <Button Classes="nav" Content="&#x2039;"
+                        ToolTip.Tip="{x:Static res:Strings.Tooltip_PreviousYear}" />
+                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_PreviousMonth}"
                         Command="{Binding PreviousMonthCommand}"
-                        ToolTip.Tip="Mes anterior" />
-                <Button Classes="nav" Content="&#x203A;"
+                        ToolTip.Tip="{x:Static res:Strings.Tooltip_PreviousMonth}" />
+                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_NextMonth}"
                         Command="{Binding NextMonthCommand}"
-                        ToolTip.Tip="Mes siguiente" />
-                <Button Classes="nav" Content="&#x00BB;"
+                        ToolTip.Tip="{x:Static res:Strings.Tooltip_NextMonth}" />
+                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_NextYear}"
                         Command="{Binding NextYearCommand}"
-                        ToolTip.Tip="Año siguiente" />
+                        ToolTip.Tip="{x:Static res:Strings.Tooltip_NextYear}" />
             </StackPanel>
 
             <TextBlock Grid.Column="1" Classes="monthTitle"
                        HorizontalAlignment="Center"
                        Text="{Binding MonthTitle}" />
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                <Button Content="Hoy"
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        Spacing="{DynamicResource HeaderActionSpacing}"
+                        VerticalAlignment="Center">
+                <Button Content="{x:Static res:Strings.Action_Today}"
                         Command="{Binding GoToTodayCommand}"
-                        ToolTip.Tip="Volver al mes actual" />
+                        ToolTip.Tip="{x:Static res:Strings.Tooltip_GoToToday}" />
                 <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
-                            ToolTip.Tip="Ir a una fecha" />
+                            ToolTip.Tip="{x:Static res:Strings.Tooltip_JumpToDate}" />
             </StackPanel>
         </Grid>
 
@@ -146,8 +145,8 @@
             produces, UniformGrid derives the six rows on its own.
         -->
         <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}"
-                      BorderBrush="{StaticResource GridLineBrush}"
-                      BorderThickness="1,0,0,1">
+                      BorderBrush="{DynamicResource GridLineBrush}"
+                      BorderThickness="{DynamicResource MonthGridBorderThickness}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="7" />
@@ -156,7 +155,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:CalendarDay">
                     <Border Classes="dayCell" Classes.outside="{Binding !IsInCurrentMonth}">
-                        <StackPanel Spacing="4">
+                        <StackPanel Spacing="{DynamicResource DayCellSpacing}">
                             <Border Classes="dayBadge" Classes.today="{Binding IsToday}">
                                 <TextBlock Classes="dayNumber" Text="{Binding DayNumber}" />
                             </Border>
@@ -165,7 +164,8 @@
                                 empty on purpose: it already claims the vertical space, so
                                 adding real events will not reflow the grid.
                             -->
-                            <StackPanel Spacing="2" MinHeight="48" />
+                            <StackPanel Spacing="{DynamicResource EventChipSpacing}"
+                                        MinHeight="{DynamicResource EventAreaMinHeight}" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>

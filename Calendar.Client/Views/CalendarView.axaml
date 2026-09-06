@@ -6,6 +6,7 @@
              xmlns:vm="using:Calendar.Client.ViewModels"
              xmlns:models="using:Calendar.Client.Models"
              xmlns:res="using:Calendar.Client.Resources"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="680"
              x:Class="Calendar.Client.Views.CalendarView"
              x:DataType="vm:CalendarViewModel">
@@ -68,35 +69,39 @@
         <!-- Header: navigation on the left, month title in the middle, jumps on the right -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="{DynamicResource HeaderMargin}">
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal"
-                        Spacing="{DynamicResource SpacingXs}"
-                        VerticalAlignment="Center">
-                <Button Classes="round" Content="{x:Static res:Strings.GlyphPreviousYear}"
-                        Command="{Binding PreviousYearCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.TooltipPreviousYear}" />
-                <Button Classes="round" Content="{x:Static res:Strings.GlyphPreviousMonth}"
+            <!--
+                The arrows flank the month name so the control and what it changes read as one
+                unit. The month name is given a fixed width: without it, every step would
+                resize the label and shift the arrows sideways.
+            -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal"
+                        Spacing="{DynamicResource SpacingMd}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Classes="round"
                         Command="{Binding PreviousMonthCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.TooltipPreviousMonth}" />
-                <Button Classes="round" Content="{x:Static res:Strings.GlyphNextMonth}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipPreviousMonth}">
+                    <materialIcons:MaterialIcon Kind="ChevronLeft" />
+                </Button>
+                <TextBlock Classes="h2"
+                           Width="{DynamicResource MonthTitleWidth}"
+                           TextAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding MonthTitle}" />
+                <Button Classes="round"
                         Command="{Binding NextMonthCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.TooltipNextMonth}" />
-                <Button Classes="round" Content="{x:Static res:Strings.GlyphNextYear}"
-                        Command="{Binding NextYearCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.TooltipNextYear}" />
+                        ToolTip.Tip="{x:Static res:Strings.TooltipNextMonth}">
+                    <materialIcons:MaterialIcon Kind="ChevronRight" />
+                </Button>
             </StackPanel>
-
-            <TextBlock Grid.Column="1" Classes="h2"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Text="{Binding MonthTitle}" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal"
                         Spacing="{DynamicResource SpacingMd}"
                         VerticalAlignment="Center">
-                <Button Content="{x:Static res:Strings.ActionToday}"
-                        Command="{Binding GoToTodayCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.TooltipGoToToday}" />
                 <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
                             ToolTip.Tip="{x:Static res:Strings.TooltipJumpToDate}" />
+                <Button Classes="action"
+                        Content="{x:Static res:Strings.ActionToday}"
+                        Command="{Binding GoToTodayCommand}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipGoToToday}" />
             </StackPanel>
         </Grid>
 

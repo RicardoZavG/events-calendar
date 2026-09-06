@@ -21,21 +21,9 @@ public static class Strings
 
     public static string ActionToday => Get(nameof(ActionToday));
 
-    public static string GlyphPreviousYear => Get(nameof(GlyphPreviousYear));
-
-    public static string GlyphPreviousMonth => Get(nameof(GlyphPreviousMonth));
-
-    public static string GlyphNextMonth => Get(nameof(GlyphNextMonth));
-
-    public static string GlyphNextYear => Get(nameof(GlyphNextYear));
-
-    public static string TooltipPreviousYear => Get(nameof(TooltipPreviousYear));
-
     public static string TooltipPreviousMonth => Get(nameof(TooltipPreviousMonth));
 
     public static string TooltipNextMonth => Get(nameof(TooltipNextMonth));
-
-    public static string TooltipNextYear => Get(nameof(TooltipNextYear));
 
     public static string TooltipGoToToday => Get(nameof(TooltipGoToToday));
 

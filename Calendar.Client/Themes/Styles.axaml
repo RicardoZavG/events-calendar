@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 
     <!--
         The rules that turn the tokens in Dimensions.axaml and Palette.axaml into reusable
@@ -64,6 +65,54 @@
         <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
     </Style>
 
+    <!-- ===== Pointer feedback ===== -->
+
+    <!--
+        Anything that responds to a click shows the hand cursor. Declared once by control type
+        rather than per usage, so a new button gets the behaviour without anyone remembering.
+        Deliberately not applied to the day cells: they do not react to a click yet, and a hand
+        cursor over something inert promises an action that does not exist.
+    -->
+    <Style Selector="Button">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="DatePicker">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <!-- A disabled control is not clickable, so it keeps the ordinary arrow. -->
+    <Style Selector="Button:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <!-- ===== Buttons ===== -->
+
+    <!--
+        The ordinary text button. Its colours are stated here rather than inherited from the
+        theme default: a control left on the theme's own brushes is the one thing a palette
+        swap cannot reach, and it has no guarantee of contrast against our surface.
+    -->
+    <Style Selector="Button.action">
+        <Setter Property="Height" Value="{DynamicResource ControlHeightMd}" />
+        <Setter Property="Padding" Value="{DynamicResource ControlPaddingSm}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}" />
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.action /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+    </Style>
+
+    <Style Selector="Button.action:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
     <!-- ===== Button size variants ===== -->
 
     <Style Selector="Button.sm">
@@ -108,6 +157,29 @@
 
     <Style Selector="Button.round:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
+    <!-- ===== Icons ===== -->
+
+    <!--
+        Icons are sized here and nowhere else. No Foreground is set on purpose: Foreground is
+        an inherited property, so an icon takes the colour of whatever holds it and follows a
+        theme change for free. Giving it a colour of its own would make every future theme
+        special-case it.
+    -->
+    <Style Selector="materialIcons|MaterialIcon">
+        <Setter Property="Width" Value="{DynamicResource IconSizeMd}" />
+        <Setter Property="Height" Value="{DynamicResource IconSizeMd}" />
+    </Style>
+
+    <Style Selector="materialIcons|MaterialIcon.sm">
+        <Setter Property="Width" Value="{DynamicResource IconSizeSm}" />
+        <Setter Property="Height" Value="{DynamicResource IconSizeSm}" />
+    </Style>
+
+    <Style Selector="materialIcons|MaterialIcon.lg">
+        <Setter Property="Width" Value="{DynamicResource IconSizeLg}" />
+        <Setter Property="Height" Value="{DynamicResource IconSizeLg}" />
     </Style>
 
 </Styles>

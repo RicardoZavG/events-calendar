@@ -8,11 +8,18 @@ namespace Calendar.Client;
 
 public partial class App : Application
 {
+    /// <summary>
+    /// Loads the XAML declared in <c>App.axaml</c> (themes, styles and application resources).
+    /// </summary>
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
 
+    /// <summary>
+    /// Runs once Avalonia has finished initializing. On desktop platforms it creates the main
+    /// window and binds it to its view model.
+    /// </summary>
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

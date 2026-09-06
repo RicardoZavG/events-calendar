@@ -15,40 +15,16 @@
     </Design.DataContext>
 
     <!--
-        No colour, size or text is written literally in this file. Colours and dimensions come
-        from the token dictionaries merged in App.axaml; text comes from Strings.resx.
+        No colour, size or text is written literally here. Shared appearances come from
+        Themes/Styles.axaml, their values from the token dictionaries, and the text from
+        Strings.resx. Only what is specific to the calendar is styled below.
     -->
     <UserControl.Styles>
-        <!-- Header -->
-        <Style Selector="TextBlock.monthTitle">
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeMonthTitle}" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-
-        <Style Selector="Button.nav">
-            <Setter Property="Width" Value="{DynamicResource NavigationButtonSize}" />
-            <Setter Property="Height" Value="{DynamicResource NavigationButtonSize}" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNavigationIcon}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="CornerRadius" Value="{DynamicResource NavigationButtonRadius}" />
-        </Style>
-        <Style Selector="Button.nav:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
-        </Style>
-
-        <!-- Weekday header row -->
+        <!-- Weekday header row: a caption, plus the alignment this grid needs. -->
         <Style Selector="TextBlock.weekday">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Margin" Value="{DynamicResource WeekdayLabelMargin}" />
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeWeekdayLabel}" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
         </Style>
 
         <!-- Day cells -->
@@ -64,7 +40,7 @@
         <Style Selector="Border.dayBadge">
             <Setter Property="Width" Value="{DynamicResource DayBadgeSize}" />
             <Setter Property="Height" Value="{DynamicResource DayBadgeSize}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource DayBadgeRadius}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
@@ -75,8 +51,6 @@
         <Style Selector="TextBlock.dayNumber">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeDayNumber}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         </Style>
         <!-- Days borrowed from the neighbouring months read as secondary. -->
         <Style Selector="Border.dayCell.outside TextBlock.dayNumber">
@@ -95,34 +69,34 @@
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="{DynamicResource HeaderMargin}">
 
             <StackPanel Grid.Column="0" Orientation="Horizontal"
-                        Spacing="{DynamicResource NavigationButtonSpacing}"
+                        Spacing="{DynamicResource SpacingXs}"
                         VerticalAlignment="Center">
-                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_PreviousYear}"
+                <Button Classes="round" Content="{x:Static res:Strings.GlyphPreviousYear}"
                         Command="{Binding PreviousYearCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.Tooltip_PreviousYear}" />
-                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_PreviousMonth}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipPreviousYear}" />
+                <Button Classes="round" Content="{x:Static res:Strings.GlyphPreviousMonth}"
                         Command="{Binding PreviousMonthCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.Tooltip_PreviousMonth}" />
-                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_NextMonth}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipPreviousMonth}" />
+                <Button Classes="round" Content="{x:Static res:Strings.GlyphNextMonth}"
                         Command="{Binding NextMonthCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.Tooltip_NextMonth}" />
-                <Button Classes="nav" Content="{x:Static res:Strings.Glyph_NextYear}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipNextMonth}" />
+                <Button Classes="round" Content="{x:Static res:Strings.GlyphNextYear}"
                         Command="{Binding NextYearCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.Tooltip_NextYear}" />
+                        ToolTip.Tip="{x:Static res:Strings.TooltipNextYear}" />
             </StackPanel>
 
-            <TextBlock Grid.Column="1" Classes="monthTitle"
-                       HorizontalAlignment="Center"
+            <TextBlock Grid.Column="1" Classes="h2"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
                        Text="{Binding MonthTitle}" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal"
-                        Spacing="{DynamicResource HeaderActionSpacing}"
+                        Spacing="{DynamicResource SpacingMd}"
                         VerticalAlignment="Center">
-                <Button Content="{x:Static res:Strings.Action_Today}"
+                <Button Content="{x:Static res:Strings.ActionToday}"
                         Command="{Binding GoToTodayCommand}"
-                        ToolTip.Tip="{x:Static res:Strings.Tooltip_GoToToday}" />
+                        ToolTip.Tip="{x:Static res:Strings.TooltipGoToToday}" />
                 <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
-                            ToolTip.Tip="{x:Static res:Strings.Tooltip_JumpToDate}" />
+                            ToolTip.Tip="{x:Static res:Strings.TooltipJumpToDate}" />
             </StackPanel>
         </Grid>
 
@@ -135,7 +109,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="sys:String">
-                    <TextBlock Classes="weekday" Text="{Binding}" />
+                    <TextBlock Classes="caption weekday" Text="{Binding}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -155,16 +129,16 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:CalendarDay">
                     <Border Classes="dayCell" Classes.outside="{Binding !IsInCurrentMonth}">
-                        <StackPanel Spacing="{DynamicResource DayCellSpacing}">
+                        <StackPanel Spacing="{DynamicResource SpacingSm}">
                             <Border Classes="dayBadge" Classes.today="{Binding IsToday}">
-                                <TextBlock Classes="dayNumber" Text="{Binding DayNumber}" />
+                                <TextBlock Classes="body dayNumber" Text="{Binding DayNumber}" />
                             </Border>
                             <!--
                                 Reserved for the event chips of a later task. The panel is
                                 empty on purpose: it already claims the vertical space, so
                                 adding real events will not reflow the grid.
                             -->
-                            <StackPanel Spacing="{DynamicResource EventChipSpacing}"
+                            <StackPanel Spacing="{DynamicResource SpacingXs}"
                                         MinHeight="{DynamicResource EventAreaMinHeight}" />
                         </StackPanel>
                     </Border>

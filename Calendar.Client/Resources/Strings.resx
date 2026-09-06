@@ -58,45 +58,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action_Today" xml:space="preserve">
+  <data name="ActionToday" xml:space="preserve">
     <value>Hoy</value>
     <comment>Button that returns the calendar to the current month.</comment>
   </data>
-  <data name="Glyph_NextMonth" xml:space="preserve">
+  <data name="GlyphNextMonth" xml:space="preserve">
     <value>›</value>
     <comment>Arrow symbol. Mirrored for right-to-left languages.</comment>
   </data>
-  <data name="Glyph_NextYear" xml:space="preserve">
+  <data name="GlyphNextYear" xml:space="preserve">
     <value>»</value>
     <comment>Arrow symbol. Mirrored for right-to-left languages.</comment>
   </data>
-  <data name="Glyph_PreviousMonth" xml:space="preserve">
+  <data name="GlyphPreviousMonth" xml:space="preserve">
     <value>‹</value>
     <comment>Arrow symbol. Mirrored for right-to-left languages.</comment>
   </data>
-  <data name="Glyph_PreviousYear" xml:space="preserve">
+  <data name="GlyphPreviousYear" xml:space="preserve">
     <value>«</value>
     <comment>Arrow symbol. Mirrored for right-to-left languages.</comment>
   </data>
-  <data name="Tooltip_GoToToday" xml:space="preserve">
+  <data name="TooltipGoToToday" xml:space="preserve">
     <value>Volver al mes actual</value>
   </data>
-  <data name="Tooltip_JumpToDate" xml:space="preserve">
+  <data name="TooltipJumpToDate" xml:space="preserve">
     <value>Ir a una fecha</value>
   </data>
-  <data name="Tooltip_NextMonth" xml:space="preserve">
+  <data name="TooltipNextMonth" xml:space="preserve">
     <value>Mes siguiente</value>
   </data>
-  <data name="Tooltip_NextYear" xml:space="preserve">
+  <data name="TooltipNextYear" xml:space="preserve">
     <value>Año siguiente</value>
   </data>
-  <data name="Tooltip_PreviousMonth" xml:space="preserve">
+  <data name="TooltipPreviousMonth" xml:space="preserve">
     <value>Mes anterior</value>
   </data>
-  <data name="Tooltip_PreviousYear" xml:space="preserve">
+  <data name="TooltipPreviousYear" xml:space="preserve">
     <value>Año anterior</value>
   </data>
-  <data name="Window_Title" xml:space="preserve">
+  <data name="WindowTitle" xml:space="preserve">
     <value>Calendario</value>
     <comment>Main window caption.</comment>
   </data>

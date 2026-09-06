@@ -1,0 +1,113 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        The rules that turn the tokens in Dimensions.axaml and Palette.axaml into reusable
+        appearances. A view states what an element *is* — a level-two heading, a small button —
+        and never restates the numbers behind it.
+
+        The normal size of every control carries no class. Only the variants around it do, so
+        the common case stays unmarked and the exception is what reads.
+    -->
+
+    <!-- ===== Type scale ===== -->
+
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH1}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH2}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH3}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h4">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH4}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h5">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH5}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h6">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH6}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.body">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeBody}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <!-- Captions are secondary by nature, so they carry the muted colour by default. -->
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeCaption}" />
+        <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+    </Style>
+
+    <!-- Modifier: demotes any text level to secondary without changing its size. -->
+    <Style Selector="TextBlock.muted">
+        <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+    </Style>
+
+    <!-- ===== Button size variants ===== -->
+
+    <Style Selector="Button.sm">
+        <Setter Property="Height" Value="{DynamicResource ControlHeightSm}" />
+        <Setter Property="Padding" Value="{DynamicResource ControlPaddingSm}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeCaption}" />
+    </Style>
+
+    <Style Selector="Button.lg">
+        <Setter Property="Height" Value="{DynamicResource ControlHeightLg}" />
+        <Setter Property="Padding" Value="{DynamicResource ControlPaddingLg}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH4}" />
+    </Style>
+
+    <!-- ===== Round icon buttons ===== -->
+
+    <!--
+        A square, fully rounded button holding a single glyph or icon. Combines with the size
+        variants: Classes="round" is the normal size, Classes="round sm" the small one.
+    -->
+    <Style Selector="Button.round">
+        <Setter Property="Width" Value="{DynamicResource ControlHeightMd}" />
+        <Setter Property="Height" Value="{DynamicResource ControlHeightMd}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeH4}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.round.sm">
+        <Setter Property="Width" Value="{DynamicResource ControlHeightSm}" />
+        <Setter Property="Height" Value="{DynamicResource ControlHeightSm}" />
+    </Style>
+
+    <Style Selector="Button.round.lg">
+        <Setter Property="Width" Value="{DynamicResource ControlHeightLg}" />
+        <Setter Property="Height" Value="{DynamicResource ControlHeightLg}" />
+    </Style>
+
+    <Style Selector="Button.round:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
+</Styles>

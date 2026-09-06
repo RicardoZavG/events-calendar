@@ -9,7 +9,7 @@
         x:Class="Calendar.Client.Views.MainWindow"
         x:DataType="vm:CalendarViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="{x:Static res:Strings.Window_Title}"
+        Title="{x:Static res:Strings.WindowTitle}"
         Width="960" Height="680"
         MinWidth="720" MinHeight="520">
 

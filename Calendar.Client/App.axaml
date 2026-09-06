@@ -22,7 +22,9 @@
         </ResourceDictionary>
     </Application.Resources>
 
+    <!-- Included after FluentTheme so the project's own rules win over the theme defaults. -->
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://Calendar.Client/Themes/Styles.axaml" />
     </Application.Styles>
 </Application>

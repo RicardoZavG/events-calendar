@@ -1,0 +1,7 @@
+@Calendar.Server_HostAddress = http://localhost:5000
+
+### Health check
+GET {{Calendar.Server_HostAddress}}/health
+Accept: application/json
+
+###

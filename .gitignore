@@ -1,9 +1,12 @@
-# ---- Claude Code project memory (kept local, not published) ----
+# ---- Local project memory and coding rules (not published) ----
 CLAUDE.md
 CLAUDE.local.md
 
 # ---- Local task notes (per-PR working notes, not published) ----
 tasks/
+
+# ---- Working-process docs (workflow guides, not project code) ----
+docs/
 
 # ---- .NET build output ----
 bin/
@@ -61,6 +64,9 @@ coverage*.info
 appsettings.*.local.json
 *.env
 .env
+
+# ---- Scratch PR body file (see docs/PULL_REQUESTS.md) ----
+.pr-body.md
 
 # ---- OS files ----
 Thumbs.db

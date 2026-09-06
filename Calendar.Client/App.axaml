@@ -3,8 +3,13 @@
              x:Class="Calendar.Client.App"
              xmlns:local="using:Calendar.Client"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             xmlns:themes="using:Calendar.Client.Themes"
+             RequestedThemeVariant="{x:Static themes:AppThemes.BlueVariantKey}">
+             <!--
+                 The starting variant is the default palette. It is replaced at startup by the
+                 one stored in the user's settings; declaring it here means the designer and the
+                 first frame always have a complete palette to resolve against.
+             -->
 
     <Application.DataTemplates>
         <local:ViewLocator />

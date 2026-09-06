@@ -7,16 +7,16 @@
         xmlns:res="using:Calendar.Client.Resources"
         mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="680"
         x:Class="Calendar.Client.Views.MainWindow"
-        x:DataType="vm:CalendarViewModel"
+        x:DataType="vm:ShellViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="{x:Static res:Strings.WindowTitle}"
         Width="960" Height="680"
         MinWidth="720" MinHeight="520">
 
     <Design.DataContext>
-        <vm:CalendarViewModel />
+        <vm:ShellViewModel />
     </Design.DataContext>
 
-    <views:CalendarView />
+    <views:ShellView />
 
 </Window>

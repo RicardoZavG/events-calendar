@@ -31,6 +31,26 @@ public static class Strings
 
     public static string WindowTitle => Get(nameof(WindowTitle));
 
+    public static string SectionCalendar => Get(nameof(SectionCalendar));
+
+    public static string SectionSettings => Get(nameof(SectionSettings));
+
+    public static string SettingsSaveFailed => Get(nameof(SettingsSaveFailed));
+
+    public static string SettingsThemeDescription => Get(nameof(SettingsThemeDescription));
+
+    public static string SettingsThemeTitle => Get(nameof(SettingsThemeTitle));
+
+    public static string ThemeBlue => Get(nameof(ThemeBlue));
+
+    public static string ThemeGraphite => Get(nameof(ThemeGraphite));
+
+    public static string ThemeGreen => Get(nameof(ThemeGreen));
+
+    public static string ThemeViolet => Get(nameof(ThemeViolet));
+
+    public static string TooltipToggleMenu => Get(nameof(TooltipToggleMenu));
+
     /// <summary>Reads one entry from the resource file.</summary>
     /// <param name="key">Resource key, always the name of the calling property.</param>
     /// <returns>

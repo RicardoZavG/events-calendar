@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Calendar.Client.ViewModels"
+             xmlns:res="using:Calendar.Client.Resources"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="680"
+             x:Class="Calendar.Client.Views.ShellView"
+             x:DataType="vm:ShellViewModel">
+
+    <Design.DataContext>
+        <vm:ShellViewModel />
+    </Design.DataContext>
+
+    <!--
+        CompactOverlay keeps the icon rail visible at all times and floats the expanded panel
+        over the content, so opening the menu never reflows the calendar underneath it.
+    -->
+    <SplitView DisplayMode="CompactOverlay"
+               IsPaneOpen="{Binding IsPaneOpen}"
+               CompactPaneLength="{DynamicResource RailWidth}"
+               OpenPaneLength="{DynamicResource PaneWidth}"
+               PaneBackground="{DynamicResource ControlBrush}">
+
+        <SplitView.Pane>
+            <StackPanel>
+                <Button Classes="rail"
+                        Command="{Binding TogglePaneCommand}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipToggleMenu}">
+                    <materialIcons:MaterialIcon Kind="Menu" />
+                </Button>
+
+                <Button Classes="rail"
+                        Classes.selected="{Binding IsCalendarSelected}"
+                        Command="{Binding ShowCalendarCommand}"
+                        ToolTip.Tip="{x:Static res:Strings.SectionCalendar}">
+                    <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingLg}">
+                        <materialIcons:MaterialIcon Kind="CalendarMonth" />
+                        <TextBlock Classes="body" Text="{x:Static res:Strings.SectionCalendar}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Classes="rail"
+                        Classes.selected="{Binding IsSettingsSelected}"
+                        Command="{Binding ShowSettingsCommand}"
+                        ToolTip.Tip="{x:Static res:Strings.SectionSettings}">
+                    <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingLg}">
+                        <materialIcons:MaterialIcon Kind="Cog" />
+                        <TextBlock Classes="body" Text="{x:Static res:Strings.SectionSettings}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </SplitView.Pane>
+
+        <!-- The view for each section is resolved by the view locator from its view model. -->
+        <ContentControl Content="{Binding CurrentSection}"
+                        Background="{DynamicResource SurfaceBrush}" />
+    </SplitView>
+</UserControl>

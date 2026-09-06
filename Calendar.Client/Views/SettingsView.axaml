@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Calendar.Client.ViewModels"
+             xmlns:themes="using:Calendar.Client.Themes"
+             xmlns:res="using:Calendar.Client.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="Calendar.Client.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <UserControl.Styles>
+        <!-- The swatch is what the choice is actually made on, so it leads the row. -->
+        <Style Selector="Border.swatch">
+            <Setter Property="Width" Value="{DynamicResource ThemeSwatchSize}" />
+            <Setter Property="Height" Value="{DynamicResource ThemeSwatchSize}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Background="{DynamicResource SurfaceBrush}">
+        <StackPanel Margin="{DynamicResource SectionPadding}"
+                    Spacing="{DynamicResource SpacingXl}">
+
+            <TextBlock Classes="h3" Text="{x:Static res:Strings.SettingsThemeTitle}" />
+            <TextBlock Classes="caption"
+                       Text="{x:Static res:Strings.SettingsThemeDescription}" />
+
+            <ListBox ItemsSource="{Binding Themes}"
+                     SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
+                     Background="Transparent"
+                     BorderThickness="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="themes:AppTheme">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="{DynamicResource SpacingLg}">
+                            <Border Classes="swatch" Background="{Binding PreviewBrush}" />
+                            <TextBlock Classes="body" Text="{Binding DisplayName}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Only present when the preference could not be written to disk. -->
+            <TextBlock Classes="caption"
+                       Text="{Binding StatusMessage}"
+                       TextWrapping="Wrap"
+                       IsVisible="{Binding StatusMessage, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

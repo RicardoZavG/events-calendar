@@ -5,6 +5,9 @@ CLAUDE.local.md
 # ---- Local task notes (per-PR working notes, not published) ----
 tasks/
 
+# ---- Working-process docs (workflow guides, not project code) ----
+docs/
+
 # ---- .NET build output ----
 bin/
 obj/

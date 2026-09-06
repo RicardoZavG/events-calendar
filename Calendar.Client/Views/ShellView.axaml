@@ -24,21 +24,33 @@
                PaneBackground="{DynamicResource ControlBrush}">
 
         <SplitView.Pane>
+            <!--
+                Each entry puts its icon in a column exactly as wide as the collapsed rail, so
+                the icon is centred while the panel is closed and stays on the same vertical
+                line once it opens. The label is hidden rather than merely covered: at the rail
+                width it would otherwise be clipped mid-word.
+            -->
             <StackPanel>
                 <Button Classes="rail"
                         Command="{Binding TogglePaneCommand}"
                         ToolTip.Tip="{x:Static res:Strings.TooltipToggleMenu}">
-                    <materialIcons:MaterialIcon Kind="Menu" />
+                    <Panel Width="{DynamicResource RailWidth}">
+                        <materialIcons:MaterialIcon Kind="Menu" HorizontalAlignment="Center" />
+                    </Panel>
                 </Button>
 
                 <Button Classes="rail"
                         Classes.selected="{Binding IsCalendarSelected}"
                         Command="{Binding ShowCalendarCommand}"
                         ToolTip.Tip="{x:Static res:Strings.SectionCalendar}">
-                    <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingLg}">
-                        <materialIcons:MaterialIcon Kind="CalendarMonth" />
+                    <StackPanel Orientation="Horizontal">
+                        <Panel Width="{DynamicResource RailWidth}">
+                            <materialIcons:MaterialIcon Kind="CalendarMonth"
+                                                        HorizontalAlignment="Center" />
+                        </Panel>
                         <TextBlock Classes="body" Text="{x:Static res:Strings.SectionCalendar}"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center"
+                                   IsVisible="{Binding IsPaneOpen}" />
                     </StackPanel>
                 </Button>
 
@@ -46,10 +58,14 @@
                         Classes.selected="{Binding IsSettingsSelected}"
                         Command="{Binding ShowSettingsCommand}"
                         ToolTip.Tip="{x:Static res:Strings.SectionSettings}">
-                    <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingLg}">
-                        <materialIcons:MaterialIcon Kind="Cog" />
+                    <StackPanel Orientation="Horizontal">
+                        <Panel Width="{DynamicResource RailWidth}">
+                            <materialIcons:MaterialIcon Kind="Cog"
+                                                        HorizontalAlignment="Center" />
+                        </Panel>
                         <TextBlock Classes="body" Text="{x:Static res:Strings.SectionSettings}"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center"
+                                   IsVisible="{Binding IsPaneOpen}" />
                     </StackPanel>
                 </Button>
             </StackPanel>

@@ -81,8 +81,17 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <!-- Rows of a list are chosen by clicking them, so they follow the same rule. -->
+    <Style Selector="ListBoxItem">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <!-- A disabled control is not clickable, so it keeps the ordinary arrow. -->
     <Style Selector="Button:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="ListBoxItem:disabled">
         <Setter Property="Cursor" Value="Arrow" />
     </Style>
 
@@ -123,7 +132,8 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Height" Value="{DynamicResource ControlHeightLg}" />
-        <Setter Property="Padding" Value="{DynamicResource InsetMd}" />
+        <!-- No padding: the icon column inside each entry does the aligning. -->
+        <Setter Property="Padding" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />

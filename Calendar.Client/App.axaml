@@ -9,7 +9,22 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <!--
+        Design tokens, merged application-wide so every view resolves colours and dimensions by
+        name instead of declaring its own.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Calendar.Client/Themes/Dimensions.axaml" />
+                <ResourceInclude Source="avares://Calendar.Client/Themes/Palette.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <!-- Included after FluentTheme so the project's own rules win over the theme defaults. -->
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://Calendar.Client/Themes/Styles.axaml" />
     </Application.Styles>
 </Application>

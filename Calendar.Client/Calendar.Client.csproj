@@ -10,6 +10,19 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
+  <!--
+    Strings.resx is the single source of user-visible text; Strings.cs reads it. No code
+    generator is attached on purpose: the IDE's generator writes its comments in the language
+    the IDE runs in and overwrites its own output on every edit, so the file it produces cannot
+    be kept consistent with the rest of the codebase. Leaving the Generator metadata here would
+    also recreate that file and collide with Strings.cs.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="12.1.2" />
     <PackageReference Include="Avalonia.Desktop" Version="12.1.2" />

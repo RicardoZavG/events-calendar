@@ -1,0 +1,56 @@
+using System.Globalization;
+using System.Resources;
+
+namespace Calendar.Client.Resources;
+
+/// <summary>
+/// Typed access to the user-visible text held in <c>Strings.resx</c>, which is the single
+/// source for every label, tooltip and caption in the application.
+/// </summary>
+/// <remarks>
+/// Written by hand rather than produced by the IDE's resource generator. The generator emits
+/// its comments in whatever language the IDE runs in and overwrites its own output on every
+/// edit of the .resx, so its result cannot be kept consistent with the rest of the codebase.
+/// Adding a string therefore means adding the key to the .resx and one property here; the
+/// property name and the resource key are deliberately identical.
+/// </remarks>
+public static class Strings
+{
+    private static readonly ResourceManager Resources =
+        new("Calendar.Client.Resources.Strings", typeof(Strings).Assembly);
+
+    public static string ActionToday => Get(nameof(ActionToday));
+
+    public static string GlyphPreviousYear => Get(nameof(GlyphPreviousYear));
+
+    public static string GlyphPreviousMonth => Get(nameof(GlyphPreviousMonth));
+
+    public static string GlyphNextMonth => Get(nameof(GlyphNextMonth));
+
+    public static string GlyphNextYear => Get(nameof(GlyphNextYear));
+
+    public static string TooltipPreviousYear => Get(nameof(TooltipPreviousYear));
+
+    public static string TooltipPreviousMonth => Get(nameof(TooltipPreviousMonth));
+
+    public static string TooltipNextMonth => Get(nameof(TooltipNextMonth));
+
+    public static string TooltipNextYear => Get(nameof(TooltipNextYear));
+
+    public static string TooltipGoToToday => Get(nameof(TooltipGoToToday));
+
+    public static string TooltipJumpToDate => Get(nameof(TooltipJumpToDate));
+
+    public static string WindowTitle => Get(nameof(WindowTitle));
+
+    /// <summary>Reads one entry from the resource file.</summary>
+    /// <param name="key">Resource key, always the name of the calling property.</param>
+    /// <returns>
+    /// The text for the current UI culture, or the key itself when the entry is missing, so a
+    /// forgotten resource shows up on screen instead of failing at runtime.
+    /// </returns>
+    private static string Get(string key)
+    {
+        return Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+    }
+}

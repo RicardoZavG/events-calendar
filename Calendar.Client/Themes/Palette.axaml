@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        Colour tokens, named by the role they play rather than by the colour they hold. A view
+        asks for "the accent" and never for "#1A73E8", which is what lets a theme replace the
+        whole palette without any view being edited.
+
+        Every colour in the application resolves here. Views look these up with DynamicResource
+        so that swapping this dictionary repaints the UI without reloading it.
+    -->
+
+    <!-- Backgrounds -->
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="HoverBrush" Color="#F1F3F4" />
+
+    <!-- Lines -->
+    <SolidColorBrush x:Key="GridLineBrush" Color="#E4E7EB" />
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="TextBrush" Color="#1F2328" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="#9AA3AD" />
+
+    <!-- Accent, and the text that sits on top of it -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#1A73E8" />
+    <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
+
+</ResourceDictionary>

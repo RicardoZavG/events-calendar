@@ -160,7 +160,7 @@ namespace Calendar.Client.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Calendar.
+        ///   Busca una cadena traducida similar a Calendario.
         /// </summary>
         public static string Window_Title {
             get {

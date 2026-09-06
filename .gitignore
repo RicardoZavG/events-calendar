@@ -62,6 +62,9 @@ appsettings.*.local.json
 *.env
 .env
 
+# ---- Scratch PR body file (see docs/PULL_REQUESTS.md) ----
+.pr-body.md
+
 # ---- OS files ----
 Thumbs.db
 Thumbs.db:encryptable

@@ -14,8 +14,12 @@
     <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="HoverBrush" Color="#F1F3F4" />
 
+    <!-- Control surface, so a button reads as a button against the page background -->
+    <SolidColorBrush x:Key="ControlBrush" Color="#F8F9FA" />
+
     <!-- Lines -->
     <SolidColorBrush x:Key="GridLineBrush" Color="#E4E7EB" />
+    <SolidColorBrush x:Key="ControlBorderBrush" Color="#DADCE0" />
 
     <!-- Text -->
     <SolidColorBrush x:Key="TextBrush" Color="#1F2328" />

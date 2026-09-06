@@ -32,11 +32,7 @@ public partial class CalendarViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MonthTitle))]
-    [NotifyCanExecuteChangedFor(
-        nameof(PreviousMonthCommand),
-        nameof(NextMonthCommand),
-        nameof(PreviousYearCommand),
-        nameof(NextYearCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PreviousMonthCommand), nameof(NextMonthCommand))]
     private DateOnly _displayedMonth;
 
     /// <summary>The cells rendered by the grid, always <see cref="MonthGrid.TotalCells"/>.</summary>
@@ -44,9 +40,15 @@ public partial class CalendarViewModel : ViewModelBase
     private IReadOnlyList<CalendarDay> _days = Array.Empty<CalendarDay>();
 
     /// <summary>
-    /// Date chosen in the "jump to date" picker. Setting it navigates to that date's month; it
-    /// is an input only, so moving with the arrows does not write back to it.
+    /// The date shown in the picker. Setting it navigates to that date's month, and navigating
+    /// updates it, so the two always agree.
     /// </summary>
+    /// <remarks>
+    /// The picker is the only place the year is displayed — the title names the month alone —
+    /// so it has to follow navigation rather than only feed it. It is never left empty: an
+    /// empty picker renders its own placeholders in the control's language, which would leak
+    /// untranslated text into the UI.
+    /// </remarks>
     [ObservableProperty]
     private DateTimeOffset? _selectedDate;
 
@@ -67,18 +69,22 @@ public partial class CalendarViewModel : ViewModelBase
     {
         _today = today;
         DisplayedMonth = FirstDayOf(today);
+        SelectedDate = ToPickerDate(today);
     }
 
     /// <summary>Abbreviated weekday names for the header row, ordered from <see cref="WeekStart"/>.</summary>
     public IReadOnlyList<string> WeekdayNames { get; } = BuildWeekdayNames();
 
-    /// <summary>The displayed month and year, e.g. "September 2026", in the current culture.</summary>
+    /// <summary>
+    /// The displayed month, e.g. "September", in the current culture. The year is deliberately
+    /// left out: the picker beside it already shows the full date.
+    /// </summary>
     public string MonthTitle
     {
         get
         {
             var culture = CultureInfo.CurrentCulture;
-            return culture.TextInfo.ToTitleCase(DisplayedMonth.ToString("MMMM yyyy", culture));
+            return culture.TextInfo.ToTitleCase(DisplayedMonth.ToString("MMMM", culture));
         }
     }
 
@@ -90,33 +96,26 @@ public partial class CalendarViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(CanGoToNextMonth))]
     private void NextMonth() => MoveTo(DisplayedMonth.AddMonths(1));
 
-    /// <summary>Moves one year back, keeping the same month.</summary>
-    [RelayCommand(CanExecute = nameof(CanGoToPreviousYear))]
-    private void PreviousYear() => MoveTo(DisplayedMonth.AddYears(-1));
-
-    /// <summary>Moves one year forward, keeping the same month.</summary>
-    [RelayCommand(CanExecute = nameof(CanGoToNextYear))]
-    private void NextYear() => MoveTo(DisplayedMonth.AddYears(1));
-
-    /// <summary>Returns to the month containing today.</summary>
+    /// <summary>Returns to today's month and puts the picker back on today.</summary>
     [RelayCommand]
-    private void GoToToday() => MoveTo(_today);
+    private void GoToToday()
+    {
+        MoveTo(_today);
+        SelectedDate = ToPickerDate(_today);
+    }
 
     private bool CanGoToPreviousMonth() => DisplayedMonth > MinMonth;
 
     private bool CanGoToNextMonth() => DisplayedMonth < MaxMonth;
 
-    private bool CanGoToPreviousYear() => DisplayedMonth.Year > MinYear;
-
-    private bool CanGoToNextYear() => DisplayedMonth.Year < MaxYear;
-
-    /// <summary>Rebuilds the grid whenever the displayed month changes.</summary>
+    /// <summary>Rebuilds the grid and realigns the picker whenever the displayed month changes.</summary>
     partial void OnDisplayedMonthChanged(DateOnly value)
     {
         Days = MonthGrid.Build(value.Year, value.Month, _today, WeekStart);
+        AlignPickerTo(value);
     }
 
-    /// <summary>Navigates to the month of the date picked in the "jump to date" control.</summary>
+    /// <summary>Navigates to the month of the date shown in the picker.</summary>
     partial void OnSelectedDateChanged(DateTimeOffset? value)
     {
         if (value is null)
@@ -124,7 +123,25 @@ public partial class CalendarViewModel : ViewModelBase
             return;
         }
 
-        MoveTo(DateOnly.FromDateTime(value.Value.Date));
+        MoveTo(ToDate(value.Value));
+    }
+
+    /// <summary>
+    /// Points the picker at <paramref name="month"/> when it is showing a different one.
+    /// </summary>
+    /// <param name="month">First day of the month now on screen.</param>
+    /// <remarks>
+    /// A picker already inside that month is left untouched, so choosing the 17th and landing
+    /// on that month does not snap the selection back to the 1st.
+    /// </remarks>
+    private void AlignPickerTo(DateOnly month)
+    {
+        if (SelectedDate is { } selected && FirstDayOf(ToDate(selected)) == month)
+        {
+            return;
+        }
+
+        SelectedDate = ToPickerDate(month);
     }
 
     /// <summary>
@@ -144,9 +161,14 @@ public partial class CalendarViewModel : ViewModelBase
     }
 
     /// <summary>Normalizes a date to the first day of its month.</summary>
-    /// <param name="date">The date to normalize.</param>
-    /// <returns>Day 1 of the same month and year.</returns>
     private static DateOnly FirstDayOf(DateOnly date) => new(date.Year, date.Month, 1);
+
+    /// <summary>Converts a picker value to a plain date, discarding time and offset.</summary>
+    private static DateOnly ToDate(DateTimeOffset value) => DateOnly.FromDateTime(value.Date);
+
+    /// <summary>Converts a date to the form the picker binds to.</summary>
+    private static DateTimeOffset ToPickerDate(DateOnly date) =>
+        new(date.ToDateTime(TimeOnly.MinValue));
 
     /// <summary>
     /// Builds the weekday header labels in display order, rotating the culture's names so the

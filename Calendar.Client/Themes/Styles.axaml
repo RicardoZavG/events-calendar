@@ -95,6 +95,38 @@
         <Setter Property="Cursor" Value="Arrow" />
     </Style>
 
+    <!-- ===== Date picker ===== -->
+
+    <!--
+        The framework's own date picker resolves fixed theme resources for its colours, so it
+        stays grey while everything around it follows the palette. These rules point its parts
+        at our tokens instead, which is why they reach inside the template by part name: the
+        control gives no other way to reach them.
+    -->
+    <Style Selector="DatePicker /template/ Button#PART_FlyoutButton">
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <!-- Day, month and year read their own colour, so they are set directly. -->
+    <Style Selector="DatePicker /template/ TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <!-- The dividers between the three fields. -->
+    <Style Selector="DatePicker /template/ Rectangle">
+        <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
+    </Style>
+
+    <Style Selector="DatePicker /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+    </Style>
+
+    <Style Selector="DatePicker:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
     <!-- ===== Buttons ===== -->
 
     <!--

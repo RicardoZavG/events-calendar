@@ -9,43 +9,54 @@
 
         Every theme defines the same complete set of names. Views look them up with
         DynamicResource, so switching the variant repaints the UI without reloading anything.
+
+        The light themes carry their colour on real surface: a filled band behind the weekday
+        row, and the surrounding chrome tinted towards the accent. HeaderBandForegroundBrush
+        exists because text on a saturated band cannot assume the ordinary text colour will
+        stay readable.
     -->
     <ResourceDictionary.ThemeDictionaries>
 
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.BlueVariantKey}">
             <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="ControlBrush" Color="#F8F9FA" />
-            <SolidColorBrush x:Key="HoverBrush" Color="#F1F3F4" />
-            <SolidColorBrush x:Key="GridLineBrush" Color="#E4E7EB" />
-            <SolidColorBrush x:Key="ControlBorderBrush" Color="#DADCE0" />
+            <SolidColorBrush x:Key="ControlBrush" Color="#F3F7FE" />
+            <SolidColorBrush x:Key="HoverBrush" Color="#E8F0FE" />
+            <SolidColorBrush x:Key="GridLineBrush" Color="#D9E2F1" />
+            <SolidColorBrush x:Key="ControlBorderBrush" Color="#C6D6F0" />
             <SolidColorBrush x:Key="TextBrush" Color="#1F2328" />
             <SolidColorBrush x:Key="MutedTextBrush" Color="#9AA3AD" />
             <SolidColorBrush x:Key="AccentBrush" Color="#1A73E8" />
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="HeaderBandBrush" Color="#174EA6" />
+            <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.GreenVariantKey}">
             <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="ControlBrush" Color="#F6FAF7" />
-            <SolidColorBrush x:Key="HoverBrush" Color="#EDF5EF" />
-            <SolidColorBrush x:Key="GridLineBrush" Color="#E1EBE4" />
-            <SolidColorBrush x:Key="ControlBorderBrush" Color="#D3E2D8" />
+            <SolidColorBrush x:Key="ControlBrush" Color="#F1F8F3" />
+            <SolidColorBrush x:Key="HoverBrush" Color="#E3F1E7" />
+            <SolidColorBrush x:Key="GridLineBrush" Color="#D5E7DA" />
+            <SolidColorBrush x:Key="ControlBorderBrush" Color="#BFDCC7" />
             <SolidColorBrush x:Key="TextBrush" Color="#1B2A1F" />
             <SolidColorBrush x:Key="MutedTextBrush" Color="#93A398" />
             <SolidColorBrush x:Key="AccentBrush" Color="#1E8E3E" />
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="HeaderBandBrush" Color="#146C2E" />
+            <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.VioletVariantKey}">
             <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="ControlBrush" Color="#F9F7FC" />
-            <SolidColorBrush x:Key="HoverBrush" Color="#F2EDFA" />
-            <SolidColorBrush x:Key="GridLineBrush" Color="#E8E4F0" />
-            <SolidColorBrush x:Key="ControlBorderBrush" Color="#DDD6EA" />
+            <SolidColorBrush x:Key="ControlBrush" Color="#F6F2FC" />
+            <SolidColorBrush x:Key="HoverBrush" Color="#EDE5F9" />
+            <SolidColorBrush x:Key="GridLineBrush" Color="#DFD5F0" />
+            <SolidColorBrush x:Key="ControlBorderBrush" Color="#CFC0E8" />
             <SolidColorBrush x:Key="TextBrush" Color="#241F2E" />
             <SolidColorBrush x:Key="MutedTextBrush" Color="#9C93AD" />
             <SolidColorBrush x:Key="AccentBrush" Color="#6C40BF" />
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="HeaderBandBrush" Color="#4B2E93" />
+            <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
         </ResourceDictionary>
 
         <!--
@@ -53,6 +64,10 @@
             a single view knowing. Its accent is light, so the text sitting on the accent goes
             dark instead of white — which is exactly why AccentForegroundBrush exists as its
             own token rather than being assumed to be white.
+
+            It deliberately does not take the filled band the light themes use: on a dark
+            surface a saturated block reads as heavy rather than as structure, and the muted
+            label on the plain surface already separates the header from the grid.
         -->
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.GraphiteVariantKey}">
             <SolidColorBrush x:Key="SurfaceBrush" Color="#202124" />
@@ -64,6 +79,8 @@
             <SolidColorBrush x:Key="MutedTextBrush" Color="#9AA0A6" />
             <SolidColorBrush x:Key="AccentBrush" Color="#8AB4F8" />
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#202124" />
+            <SolidColorBrush x:Key="HeaderBandBrush" Color="#202124" />
+            <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#9AA0A6" />
         </ResourceDictionary>
 
     </ResourceDictionary.ThemeDictionaries>

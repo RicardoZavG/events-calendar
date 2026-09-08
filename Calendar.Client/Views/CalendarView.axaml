@@ -21,11 +21,16 @@
         Strings.resx. Only what is specific to the calendar is styled below.
     -->
     <UserControl.Styles>
-        <!-- Weekday header row: a caption, plus the alignment this grid needs. -->
+        <!--
+            Weekday header row. It sits on the filled band, so its colour comes from the band's
+            own foreground token rather than from the caption class it would otherwise inherit:
+            the ordinary muted text has no guarantee of contrast against a saturated colour.
+        -->
         <Style Selector="TextBlock.weekday">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Margin" Value="{DynamicResource WeekdayLabelMargin}" />
             <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource HeaderBandForegroundBrush}" />
         </Style>
 
         <!-- Day cells -->
@@ -33,6 +38,12 @@
             <Setter Property="BorderBrush" Value="{DynamicResource GridLineBrush}" />
             <Setter Property="BorderThickness" Value="{DynamicResource DayCellBorderThickness}" />
             <Setter Property="Padding" Value="{DynamicResource DayCellPadding}" />
+            <!--
+                Required, not decorative: a control with no background is invisible to the
+                pointer, so without this the cell only reacted where one of its children
+                happened to be and the hover appeared to come and go.
+            -->
+            <Setter Property="Background" Value="Transparent" />
         </Style>
         <Style Selector="Border.dayCell:pointerover">
             <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
@@ -105,19 +116,25 @@
             </StackPanel>
         </Grid>
 
-        <!-- Weekday header -->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding WeekdayNames}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="7" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="sys:String">
-                    <TextBlock Classes="caption weekday" Text="{Binding}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <!--
+            Weekday header, carried on a filled band. The band is what gives the theme presence
+            on screen: the accent occupies real surface instead of appearing only as a badge and
+            a few lines.
+        -->
+        <Border Grid.Row="1" Background="{DynamicResource HeaderBandBrush}">
+            <ItemsControl ItemsSource="{Binding WeekdayNames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="7" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="sys:String">
+                        <TextBlock Classes="caption weekday" Text="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
 
         <!--
             Day grid. Only the column count is fixed: with the 42 cells MonthGrid always

@@ -78,4 +78,37 @@
     <value>Calendario</value>
     <comment>Main window caption.</comment>
   </data>
+  <data name="SectionCalendar" xml:space="preserve">
+    <value>Calendario</value>
+    <comment>Side panel entry for the calendar section.</comment>
+  </data>
+  <data name="SectionSettings" xml:space="preserve">
+    <value>Configuraciones</value>
+    <comment>Side panel entry for the settings section.</comment>
+  </data>
+  <data name="SettingsSaveFailed" xml:space="preserve">
+    <value>No se pudo guardar la preferencia. El tema se aplicó solo para esta sesión.</value>
+    <comment>Shown when the settings file could not be written.</comment>
+  </data>
+  <data name="SettingsThemeDescription" xml:space="preserve">
+    <value>El color elegido se aplica a toda la aplicación.</value>
+  </data>
+  <data name="SettingsThemeTitle" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="ThemeBlue" xml:space="preserve">
+    <value>Azul</value>
+  </data>
+  <data name="ThemeGraphite" xml:space="preserve">
+    <value>Grafito</value>
+  </data>
+  <data name="ThemeGreen" xml:space="preserve">
+    <value>Verde</value>
+  </data>
+  <data name="ThemeViolet" xml:space="preserve">
+    <value>Violeta</value>
+  </data>
+  <data name="TooltipToggleMenu" xml:space="preserve">
+    <value>Mostrar u ocultar el menú</value>
+  </data>
 </root>

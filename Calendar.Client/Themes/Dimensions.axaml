@@ -59,6 +59,12 @@
     <CornerRadius x:Key="RadiusMd">8</CornerRadius>
     <CornerRadius x:Key="RadiusPill">999</CornerRadius>
 
+    <!-- Side panel: the rail is wide enough for an icon button, the open pane for its label. -->
+    <x:Double x:Key="RailWidth">56</x:Double>
+    <x:Double x:Key="PaneWidth">220</x:Double>
+    <x:Double x:Key="ThemeSwatchSize">20</x:Double>
+    <Thickness x:Key="SectionPadding">24</Thickness>
+
     <!-- Calendar-specific measurements that no general scale covers -->
     <x:Double x:Key="DayBadgeSize">26</x:Double>
     <!-- Wide enough for the longest month name, so the arrows beside it never shift. -->

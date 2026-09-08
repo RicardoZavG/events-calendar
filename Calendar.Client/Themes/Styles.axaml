@@ -81,9 +81,50 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <!-- Rows of a list are chosen by clicking them, so they follow the same rule. -->
+    <Style Selector="ListBoxItem">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <!-- A disabled control is not clickable, so it keeps the ordinary arrow. -->
     <Style Selector="Button:disabled">
         <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="ListBoxItem:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <!-- ===== Date picker ===== -->
+
+    <!--
+        The framework's own date picker resolves fixed theme resources for its colours, so it
+        stays grey while everything around it follows the palette. These rules point its parts
+        at our tokens instead, which is why they reach inside the template by part name: the
+        control gives no other way to reach them.
+    -->
+    <Style Selector="DatePicker /template/ Button#PART_FlyoutButton">
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <!-- Day, month and year read their own colour, so they are set directly. -->
+    <Style Selector="DatePicker /template/ TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <!-- The dividers between the three fields. -->
+    <Style Selector="DatePicker /template/ Rectangle">
+        <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
+    </Style>
+
+    <Style Selector="DatePicker /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+    </Style>
+
+    <Style Selector="DatePicker:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
     </Style>
 
     <!-- ===== Buttons ===== -->
@@ -110,6 +151,40 @@
     </Style>
 
     <Style Selector="Button.action:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
+    <!--
+        Side panel entry: a full-width row that shows only its icon while the panel is
+        collapsed, and gains its label when it opens. The selected one is marked with the
+        accent so the current section is readable at a glance in either state.
+    -->
+    <Style Selector="Button.rail">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Height" Value="{DynamicResource ControlHeightLg}" />
+        <!-- No padding: the icon column inside each entry does the aligning. -->
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="Button.rail /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.rail:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.rail.selected">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.rail.selected /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource HoverBrush}" />
     </Style>
 

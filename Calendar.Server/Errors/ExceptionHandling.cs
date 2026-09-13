@@ -43,7 +43,7 @@ public static class ExceptionHandling
             await WriteAsync(
                 context,
                 StatusCodes.Status500InternalServerError,
-                "Ocurrió un error inesperado en el servidor.");
+                ApiErrorCodes.ServerUnexpected);
         }));
 
         return app;

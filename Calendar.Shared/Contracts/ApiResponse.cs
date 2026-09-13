@@ -13,7 +13,15 @@ public sealed record ApiResponse<T>
     /// <summary>The payload; <c>null</c> when the request failed or returns nothing.</summary>
     public T? Data { get; init; }
 
-    /// <summary>A message safe to show the user; <c>null</c> when the request succeeded.</summary>
+    /// <summary>
+    /// An <see cref="ApiErrorCodes"/> entry naming why the request failed; <c>null</c> when it
+    /// succeeded.
+    /// </summary>
+    /// <remarks>
+    /// A code, never a sentence. The server does not know what language the person in front of
+    /// a client reads, and wording baked into a response cannot be translated by the side that
+    /// actually displays it.
+    /// </remarks>
     public string? Error { get; init; }
 
     /// <summary>Builds a successful response.</summary>
@@ -21,6 +29,7 @@ public sealed record ApiResponse<T>
     public static ApiResponse<T> Ok(T? data) => new() { Success = true, Data = data };
 
     /// <summary>Builds a failed response.</summary>
-    /// <param name="error">Why it failed, phrased for the person reading it.</param>
-    public static ApiResponse<T> Fail(string error) => new() { Success = false, Error = error };
+    /// <param name="errorCode">The <see cref="ApiErrorCodes"/> entry naming the reason.</param>
+    public static ApiResponse<T> Fail(string errorCode) =>
+        new() { Success = false, Error = errorCode };
 }

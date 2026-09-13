@@ -104,7 +104,7 @@ public sealed class EventEndpointsTests : IClassFixture<CalendarApiFactory>
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.False(body!.Success);
-        Assert.False(string.IsNullOrWhiteSpace(body.Error));
+        Assert.Equal(ApiErrorCodes.EventTitleRequired, body.Error);
     }
 
     [Fact]
@@ -113,9 +113,11 @@ public sealed class EventEndpointsTests : IClassFixture<CalendarApiFactory>
         // Act
         var response = await _client.PostAsJsonAsync(
             "/events", BuildRequest(startHour: 16, endHour: 15));
+        var body = await response.Content.ReadFromJsonAsync<ApiResponse<Event>>();
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(ApiErrorCodes.EventEndNotAfterStart, body!.Error);
     }
 
     [Fact]
@@ -134,10 +136,12 @@ public sealed class EventEndpointsTests : IClassFixture<CalendarApiFactory>
     {
         // Act
         var response = await _client.PostAsJsonAsync(
-            "/events", BuildRequest(new string('a', 500)));
+            "/events", BuildRequest(new string('a', EventLimits.TitleMaxLength + 1)));
+        var body = await response.Content.ReadFromJsonAsync<ApiResponse<Event>>();
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(ApiErrorCodes.EventTitleTooLong, body!.Error);
     }
 
     [Fact]
@@ -145,7 +149,8 @@ public sealed class EventEndpointsTests : IClassFixture<CalendarApiFactory>
     {
         // Act
         var response = await _client.PostAsJsonAsync(
-            "/events", BuildRequest(description: new string('a', 5000)));
+            "/events",
+            BuildRequest(description: new string('a', EventLimits.DescriptionMaxLength + 1)));
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -195,6 +200,7 @@ public sealed class EventEndpointsTests : IClassFixture<CalendarApiFactory>
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.False(body!.Success);
+        Assert.Equal(ApiErrorCodes.EventNotFound, body.Error);
     }
 
     [Fact]

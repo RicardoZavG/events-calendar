@@ -49,13 +49,13 @@ public static class EventEndpoints
         if (from is null || to is null)
         {
             return Results.BadRequest(
-                ApiResponse<IReadOnlyList<Event>>.Fail("Los parámetros 'from' y 'to' son obligatorios."));
+                ApiResponse<IReadOnlyList<Event>>.Fail(ApiErrorCodes.RangeRequired));
         }
 
         if (to <= from)
         {
             return Results.BadRequest(
-                ApiResponse<IReadOnlyList<Event>>.Fail("'to' debe ser posterior a 'from'."));
+                ApiResponse<IReadOnlyList<Event>>.Fail(ApiErrorCodes.RangeEndNotAfterStart));
         }
 
         var events = await repository.FindInRangeAsync(
@@ -189,5 +189,5 @@ public static class EventEndpoints
     /// <summary>The single "not found" answer, so every endpoint words it identically.</summary>
     /// <typeparam name="T">Payload type the caller expected.</typeparam>
     private static IResult NotFound<T>() =>
-        Results.NotFound(ApiResponse<T>.Fail("El evento no existe."));
+        Results.NotFound(ApiResponse<T>.Fail(ApiErrorCodes.EventNotFound));
 }

@@ -1,3 +1,4 @@
+using Calendar.Shared.Contracts;
 using Calendar.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -10,12 +11,6 @@ namespace Calendar.Server.Data;
 public sealed class CalendarDbContext(DbContextOptions<CalendarDbContext> options)
     : DbContext(options)
 {
-    /// <summary>Maximum length accepted for an event title.</summary>
-    public const int TitleMaxLength = 200;
-
-    /// <summary>Maximum length accepted for an event description.</summary>
-    public const int DescriptionMaxLength = 2000;
-
     /// <summary>Every stored event.</summary>
     public DbSet<Event> Events => Set<Event>();
 
@@ -38,10 +33,10 @@ public sealed class CalendarDbContext(DbContextOptions<CalendarDbContext> option
 
             entity.Property(item => item.Title)
                 .IsRequired()
-                .HasMaxLength(TitleMaxLength);
+                .HasMaxLength(EventLimits.TitleMaxLength);
 
             entity.Property(item => item.Description)
-                .HasMaxLength(DescriptionMaxLength);
+                .HasMaxLength(EventLimits.DescriptionMaxLength);
 
             entity.Property(item => item.Start).HasConversion(utcConverter);
             entity.Property(item => item.End).HasConversion(utcConverter);

@@ -1,4 +1,3 @@
-using Calendar.Server.Data;
 using Calendar.Shared.Contracts;
 
 namespace Calendar.Server.Events;
@@ -8,47 +7,48 @@ namespace Calendar.Server.Events;
 /// </summary>
 /// <remarks>
 /// Data arriving over the network is untrusted, whatever sent it. Every field is checked here
-/// so a bad request is answered with a message the caller can act on, rather than surfacing as
-/// a database error later.
+/// so a bad request is rejected with a reason the caller can act on, rather than surfacing as a
+/// database error later.
 /// </remarks>
 public static class EventValidator
 {
     /// <summary>Validates a create or update payload.</summary>
     /// <param name="request">The body as received; may be missing fields entirely.</param>
     /// <returns>
-    /// <c>null</c> when the payload is usable, otherwise the reason it was rejected, phrased
-    /// for the person reading it and free of internal detail.
+    /// <c>null</c> when the payload is usable, otherwise the <see cref="ApiErrorCodes"/> entry
+    /// naming why it was rejected. A code rather than a sentence: the server does not know what
+    /// language the person in front of the client reads.
     /// </returns>
     public static string? Validate(EventRequest? request)
     {
         if (request is null)
         {
-            return "El cuerpo de la petición está vacío.";
+            return ApiErrorCodes.RequestBodyMissing;
         }
 
         if (string.IsNullOrWhiteSpace(request.Title))
         {
-            return "El título es obligatorio.";
+            return ApiErrorCodes.EventTitleRequired;
         }
 
-        if (request.Title.Length > CalendarDbContext.TitleMaxLength)
+        if (request.Title.Length > EventLimits.TitleMaxLength)
         {
-            return $"El título no puede superar los {CalendarDbContext.TitleMaxLength} caracteres.";
+            return ApiErrorCodes.EventTitleTooLong;
         }
 
-        if (request.Description is { Length: > CalendarDbContext.DescriptionMaxLength })
+        if (request.Description is { Length: > EventLimits.DescriptionMaxLength })
         {
-            return $"La descripción no puede superar los {CalendarDbContext.DescriptionMaxLength} caracteres.";
+            return ApiErrorCodes.EventDescriptionTooLong;
         }
 
         if (request.Start is null || request.End is null)
         {
-            return "La fecha de inicio y la de fin son obligatorias.";
+            return ApiErrorCodes.EventDatesRequired;
         }
 
         if (request.End <= request.Start)
         {
-            return "La fecha de fin debe ser posterior a la de inicio.";
+            return ApiErrorCodes.EventEndNotAfterStart;
         }
 
         return null;

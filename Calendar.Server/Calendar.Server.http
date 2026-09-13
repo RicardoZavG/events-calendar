@@ -1,7 +1,66 @@
 @Calendar.Server_HostAddress = http://localhost:5000
 
-### Health check
+### Liveness probe
 GET {{Calendar.Server_HostAddress}}/health
 Accept: application/json
 
-###
+### List the events of September 2026
+GET {{Calendar.Server_HostAddress}}/events?from=2026-09-01T00:00:00Z&to=2026-10-01T00:00:00Z
+Accept: application/json
+
+### Create an event
+# Instants are sent in UTC. The response carries the identifier the server assigned.
+POST {{Calendar.Server_HostAddress}}/events
+Content-Type: application/json
+
+{
+  "title": "Sprint planning",
+  "description": "Review of the current sprint",
+  "start": "2026-09-08T15:00:00Z",
+  "end": "2026-09-08T16:00:00Z"
+}
+
+### Read one event
+# Replace the identifier with the one returned by the request above.
+GET {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Update an event
+PUT {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "title": "Sprint planning (moved)",
+  "description": "Review of the current sprint",
+  "start": "2026-09-08T17:00:00Z",
+  "end": "2026-09-08T18:00:00Z"
+}
+
+### Delete an event
+DELETE {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+
+### Rejected: end is not after start
+# Answers 400 with "error": "event.end_not_after_start".
+POST {{Calendar.Server_HostAddress}}/events
+Content-Type: application/json
+
+{
+  "title": "Invalid interval",
+  "start": "2026-09-08T16:00:00Z",
+  "end": "2026-09-08T15:00:00Z"
+}
+
+### Accented characters
+# Kept on purpose, and the only request here that is not plain ASCII. The body must be sent as
+# UTF-8: a client that sends it in the system code page has its accents rejected before any of
+# this server's code runs. Leaving one sample that exercises it means the next person to break
+# encoding finds out here instead of in production.
+POST {{Calendar.Server_HostAddress}}/events
+Content-Type: application/json; charset=utf-8
+
+{
+  "title": "Reunión de planeación",
+  "description": "Revisión del sprint",
+  "start": "2026-09-09T15:00:00Z",
+  "end": "2026-09-09T16:00:00Z"
+}

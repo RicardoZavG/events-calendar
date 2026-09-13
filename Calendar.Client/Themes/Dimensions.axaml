@@ -65,6 +65,10 @@
     <x:Double x:Key="ThemeSwatchSize">20</x:Double>
     <Thickness x:Key="SectionPadding">24</Thickness>
 
+    <!-- Event chips and the connection banner -->
+    <Thickness x:Key="EventChipPadding">4,1</Thickness>
+    <Thickness x:Key="BannerPadding">16,8</Thickness>
+
     <!-- Calendar-specific measurements that no general scale covers -->
     <x:Double x:Key="DayBadgeSize">26</x:Double>
     <!-- Wide enough for the longest month name, so the arrows beside it never shift. -->

@@ -64,6 +64,38 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
+
+        <!-- Event chips -->
+        <Style Selector="Border.eventChip">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}" />
+            <Setter Property="Padding" Value="{DynamicResource EventChipPadding}" />
+        </Style>
+        <!-- A day the event merely runs through reads as an echo of where it started. -->
+        <Style Selector="Border.eventChip.continuation">
+            <Setter Property="Opacity" Value="0.65" />
+        </Style>
+
+        <Style Selector="Border.eventChip TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeCaption}" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+        <Style Selector="TextBlock.eventTime">
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="TextBlock.moreEvents">
+            <Setter Property="Margin" Value="{DynamicResource InsetXs}" />
+        </Style>
+
+        <!-- Connection banner -->
+        <Style Selector="Border.banner">
+            <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="Padding" Value="{DynamicResource BannerPadding}" />
+        </Style>
         <!-- Days borrowed from the neighbouring months read as secondary. -->
         <Style Selector="Border.dayCell.outside TextBlock.dayNumber">
             <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
@@ -75,10 +107,29 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,Auto,*" Background="{DynamicResource SurfaceBrush}">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Background="{DynamicResource SurfaceBrush}">
+
+        <!--
+            Connection banner. Present only when something is wrong, and never in the way: the
+            calendar below it stays navigable, because a month grid with no events is still
+            more use than a window that refuses to open.
+        -->
+        <Border Grid.Row="0" Classes="banner" IsVisible="{Binding HasProblem}">
+            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingMd}"
+                        VerticalAlignment="Center">
+                <materialIcons:MaterialIcon Kind="CloudOffOutline"
+                                            VerticalAlignment="Center" />
+                <TextBlock Classes="body" Text="{Binding ProblemMessage}"
+                           TextWrapping="Wrap" VerticalAlignment="Center" />
+                <Button Classes="action sm"
+                        Content="{x:Static res:Strings.ActionRetry}"
+                        Command="{Binding ReloadCommand}"
+                        IsEnabled="{Binding !IsLoading}" />
+            </StackPanel>
+        </Border>
 
         <!-- Header: navigation on the left, month title in the middle, jumps on the right -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="{DynamicResource HeaderMargin}">
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="{DynamicResource HeaderMargin}">
 
             <!--
                 The arrows flank the month name so the control and what it changes read as one
@@ -121,7 +172,7 @@
             on screen: the accent occupies real surface instead of appearing only as a badge and
             a few lines.
         -->
-        <Border Grid.Row="1" Background="{DynamicResource HeaderBandBrush}">
+        <Border Grid.Row="2" Background="{DynamicResource HeaderBandBrush}">
             <ItemsControl ItemsSource="{Binding WeekdayNames}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -140,7 +191,7 @@
             Day grid. Only the column count is fixed: with the 42 cells MonthGrid always
             produces, UniformGrid derives the six rows on its own.
         -->
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}"
+        <ItemsControl Grid.Row="3" ItemsSource="{Binding Days}"
                       BorderBrush="{DynamicResource GridLineBrush}"
                       BorderThickness="{DynamicResource MonthGridBorderThickness}">
             <ItemsControl.ItemsPanel>
@@ -156,12 +207,40 @@
                                 <TextBlock Classes="body dayNumber" Text="{Binding DayNumber}" />
                             </Border>
                             <!--
-                                Reserved for the event chips of a later task. The panel is
-                                empty on purpose: it already claims the vertical space, so
-                                adding real events will not reflow the grid.
+                                The space this panel claims was reserved from the first version
+                                of the grid, so filling it does not change any row's height.
                             -->
                             <StackPanel Spacing="{DynamicResource SpacingXs}"
-                                        MinHeight="{DynamicResource EventAreaMinHeight}" />
+                                        MinHeight="{DynamicResource EventAreaMinHeight}">
+                                <ItemsControl ItemsSource="{Binding VisibleEvents}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="{DynamicResource SpacingXs}" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="models:EventChip">
+                                            <Border Classes="eventChip"
+                                                    Classes.continuation="{Binding IsContinuation}"
+                                                    ToolTip.Tip="{Binding Title}">
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="{DynamicResource SpacingSm}">
+                                                    <TextBlock Classes="eventTime"
+                                                               Text="{Binding TimeLabel}"
+                                                               IsVisible="{Binding TimeLabel,
+                                                                   Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                                    <TextBlock Classes="eventTitle"
+                                                               Text="{Binding Title}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Classes="caption moreEvents"
+                                           Text="{Binding HiddenEventsLabel}"
+                                           IsVisible="{Binding HasHiddenEvents}" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

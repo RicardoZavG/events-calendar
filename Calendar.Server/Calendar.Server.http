@@ -1,7 +1,50 @@
 @Calendar.Server_HostAddress = http://localhost:5000
 
-### Health check
+### Liveness probe
 GET {{Calendar.Server_HostAddress}}/health
 Accept: application/json
 
-###
+### List the events of September 2026
+GET {{Calendar.Server_HostAddress}}/events?from=2026-09-01T00:00:00Z&to=2026-10-01T00:00:00Z
+Accept: application/json
+
+### Create an event
+# Instants are sent in UTC. The response carries the identifier the server assigned.
+POST {{Calendar.Server_HostAddress}}/events
+Content-Type: application/json
+
+{
+  "title": "Reunión de planeación",
+  "description": "Revisión del sprint",
+  "start": "2026-09-08T15:00:00Z",
+  "end": "2026-09-08T16:00:00Z"
+}
+
+### Read one event
+# Replace the identifier with the one returned by the request above.
+GET {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Update an event
+PUT {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "title": "Reunión de planeación (movida)",
+  "description": "Revisión del sprint",
+  "start": "2026-09-08T17:00:00Z",
+  "end": "2026-09-08T18:00:00Z"
+}
+
+### Delete an event
+DELETE {{Calendar.Server_HostAddress}}/events/00000000-0000-0000-0000-000000000000
+
+### Rejected: end is not after start
+POST {{Calendar.Server_HostAddress}}/events
+Content-Type: application/json
+
+{
+  "title": "Intervalo inválido",
+  "start": "2026-09-08T16:00:00Z",
+  "end": "2026-09-08T15:00:00Z"
+}

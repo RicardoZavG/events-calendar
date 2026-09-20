@@ -1,5 +1,4 @@
-using System;
-using Avalonia.Styling;
+using Calendar.Client.Services;
 using Calendar.Client.Settings;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,21 +20,23 @@ public partial class ShellViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsSettingsSelected))]
     private ViewModelBase _currentSection;
 
-    /// <summary>Creates the shell over the user's own settings file.</summary>
+    /// <summary>Creates a shell wired to nothing in particular.</summary>
     /// <remarks>Used by the XAML previewer, which cannot supply constructor arguments.</remarks>
     public ShellViewModel()
-        : this(new SettingsStore(), _ => { })
+        : this(
+            new SettingsViewModel(new SettingsStore(), _ => { }),
+            new CalendarViewModel(new OfflineEventApiClient()))
     {
     }
 
-    /// <summary>Creates the shell and the sections it hosts.</summary>
-    /// <param name="store">Where preferences are read from and written to.</param>
-    /// <param name="applyTheme">Applies a theme variant to the running application.</param>
-    public ShellViewModel(SettingsStore store, Action<ThemeVariant> applyTheme)
+    /// <summary>Creates the shell over the sections it hosts.</summary>
+    /// <param name="settings">The settings section.</param>
+    /// <param name="calendar">The calendar section.</param>
+    public ShellViewModel(SettingsViewModel settings, CalendarViewModel calendar)
     {
-        Calendar = new CalendarViewModel();
-        Settings = new SettingsViewModel(store, applyTheme);
-        _currentSection = Calendar;
+        Settings = settings;
+        Calendar = calendar;
+        _currentSection = calendar;
     }
 
     /// <summary>The calendar section.</summary>

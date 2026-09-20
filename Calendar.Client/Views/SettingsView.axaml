@@ -42,6 +42,19 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
+            <TextBlock Classes="h3" Text="{x:Static res:Strings.SettingsServerTitle}" />
+            <TextBlock Classes="caption"
+                       Text="{x:Static res:Strings.SettingsServerDescription}"
+                       TextWrapping="Wrap" />
+
+            <!--
+                Written back when the field loses focus, not on every keystroke: the setting is
+                saved to disk as it changes, and half-typed addresses are not worth a write each.
+            -->
+            <TextBox Text="{Binding ServerAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                     HorizontalAlignment="Left"
+                     MinWidth="{DynamicResource PaneWidth}" />
+
             <!-- Only present when the preference could not be written to disk. -->
             <TextBlock Classes="caption"
                        Text="{Binding StatusMessage}"

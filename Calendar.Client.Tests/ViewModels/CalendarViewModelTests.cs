@@ -1,5 +1,6 @@
 using System.Globalization;
 using Calendar.Client.Models;
+using Calendar.Client.Services;
 using Calendar.Client.ViewModels;
 
 namespace Calendar.Client.Tests.ViewModels;
@@ -12,7 +13,14 @@ public sealed class CalendarViewModelTests
 {
     private static readonly DateOnly Today = new(2026, 9, 6);
 
-    private static CalendarViewModel CreateViewModel() => new(Today);
+    /// <summary>
+    /// Built with no server behind it: these cases are about navigation, and an unreachable
+    /// server leaves the grid exactly as the navigation produced it.
+    /// </summary>
+    private static CalendarViewModel Create(DateOnly today) =>
+        new(new OfflineEventApiClient(), today, TimeZoneInfo.Utc);
+
+    private static CalendarViewModel CreateViewModel() => Create(Today);
 
     private static DateOnly PickedDate(CalendarViewModel viewModel) =>
         DateOnly.FromDateTime(viewModel.SelectedDate!.Value.Date);
@@ -78,7 +86,7 @@ public sealed class CalendarViewModelTests
     public void NextMonth_RollsIntoTheNextYear_WhenLeavingDecember()
     {
         // Arrange
-        var viewModel = new CalendarViewModel(new DateOnly(2026, 12, 20));
+        var viewModel = Create(new DateOnly(2026, 12, 20));
 
         // Act
         viewModel.NextMonthCommand.Execute(null);
@@ -91,7 +99,7 @@ public sealed class CalendarViewModelTests
     public void PreviousMonth_RollsIntoThePreviousYear_WhenLeavingJanuary()
     {
         // Arrange
-        var viewModel = new CalendarViewModel(new DateOnly(2026, 1, 20));
+        var viewModel = Create(new DateOnly(2026, 1, 20));
 
         // Act
         viewModel.PreviousMonthCommand.Execute(null);
@@ -108,7 +116,7 @@ public sealed class CalendarViewModelTests
     public void NextMonth_LandsOnFebruary_WhenSteppingFromA31DayJanuary()
     {
         // Arrange
-        var viewModel = new CalendarViewModel(new DateOnly(2026, 1, 31));
+        var viewModel = Create(new DateOnly(2026, 1, 31));
 
         // Act
         viewModel.NextMonthCommand.Execute(null);
@@ -224,7 +232,7 @@ public sealed class CalendarViewModelTests
     public void Navigation_IsBlockedBackwards_AtTheStartOfTheSupportedRange()
     {
         // Arrange
-        var viewModel = new CalendarViewModel(new DateOnly(CalendarViewModel.MinYear, 1, 15));
+        var viewModel = Create(new DateOnly(CalendarViewModel.MinYear, 1, 15));
 
         // Act & Assert
         Assert.False(viewModel.PreviousMonthCommand.CanExecute(null));
@@ -235,7 +243,7 @@ public sealed class CalendarViewModelTests
     public void Navigation_IsBlockedForwards_AtTheEndOfTheSupportedRange()
     {
         // Arrange
-        var viewModel = new CalendarViewModel(new DateOnly(CalendarViewModel.MaxYear, 12, 15));
+        var viewModel = Create(new DateOnly(CalendarViewModel.MaxYear, 12, 15));
 
         // Act & Assert
         Assert.False(viewModel.NextMonthCommand.CanExecute(null));

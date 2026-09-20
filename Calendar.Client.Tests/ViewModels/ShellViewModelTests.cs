@@ -1,3 +1,4 @@
+using Calendar.Client.Services;
 using Calendar.Client.Settings;
 using Calendar.Client.ViewModels;
 
@@ -15,8 +16,8 @@ public sealed class ShellViewModelTests : IDisposable
     {
         _folder = Path.Combine(Path.GetTempPath(), "calendar-tests-" + Guid.NewGuid().ToString("N"));
         _shell = new ShellViewModel(
-            new SettingsStore(Path.Combine(_folder, "settings.json")),
-            _ => { });
+            new SettingsViewModel(new SettingsStore(Path.Combine(_folder, "settings.json")), _ => { }),
+            new CalendarViewModel(new OfflineEventApiClient()));
     }
 
     public void Dispose()

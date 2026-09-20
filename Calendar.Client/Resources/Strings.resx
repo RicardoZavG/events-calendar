@@ -87,7 +87,7 @@
     <comment>Side panel entry for the settings section.</comment>
   </data>
   <data name="SettingsSaveFailed" xml:space="preserve">
-    <value>No se pudo guardar la preferencia. El tema se aplicó solo para esta sesión.</value>
+    <value>No se pudo guardar la preferencia. El cambio se aplicó solo para esta sesión.</value>
     <comment>Shown when the settings file could not be written.</comment>
   </data>
   <data name="SettingsThemeDescription" xml:space="preserve">
@@ -110,5 +110,53 @@
   </data>
   <data name="TooltipToggleMenu" xml:space="preserve">
     <value>Mostrar u ocultar el menú</value>
+  </data>
+  <data name="ErrorEventDatesRequired" xml:space="preserve">
+    <value>La fecha de inicio y la de fin son obligatorias.</value>
+  </data>
+  <data name="ErrorEventDescriptionTooLong" xml:space="preserve">
+    <value>La descripción es demasiado larga.</value>
+  </data>
+  <data name="ErrorEventEndNotAfterStart" xml:space="preserve">
+    <value>La fecha de fin debe ser posterior a la de inicio.</value>
+  </data>
+  <data name="ErrorEventNotFound" xml:space="preserve">
+    <value>El evento ya no existe.</value>
+  </data>
+  <data name="ErrorEventTitleRequired" xml:space="preserve">
+    <value>El título es obligatorio.</value>
+  </data>
+  <data name="ErrorEventTitleTooLong" xml:space="preserve">
+    <value>El título es demasiado largo.</value>
+  </data>
+  <data name="ErrorRequestInvalid" xml:space="preserve">
+    <value>La petición no es válida.</value>
+  </data>
+  <data name="ErrorRequestTimedOut" xml:space="preserve">
+    <value>La computadora central tardó demasiado en responder.</value>
+  </data>
+  <data name="ErrorResponseUnreadable" xml:space="preserve">
+    <value>La dirección configurada no responde como el servidor del calendario.</value>
+  </data>
+  <data name="ErrorServerUnreachable" xml:space="preserve">
+    <value>Sin conexión con la computadora central.</value>
+  </data>
+  <data name="ErrorUnexpected" xml:space="preserve">
+    <value>Ocurrió un error inesperado.</value>
+    <comment>Fallback for a code this version does not know.</comment>
+  </data>
+  <data name="EventsMoreFormat" xml:space="preserve">
+    <value>+{0} más</value>
+    <comment>Count of events that did not fit in a day cell.</comment>
+  </data>
+  <data name="SettingsServerDescription" xml:space="preserve">
+    <value>Dirección de la computadora central que guarda los eventos.</value>
+  </data>
+  <data name="SettingsServerTitle" xml:space="preserve">
+    <value>Servidor</value>
+  </data>
+  <data name="ActionRetry" xml:space="preserve">
+    <value>Reintentar</value>
+    <comment>Retries the fetch after a connection failure.</comment>
   </data>
 </root>

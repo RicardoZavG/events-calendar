@@ -223,4 +223,126 @@ public sealed class EventApiClientTests
         // Assert
         Assert.Equal(1, handler.Calls);
     }
+
+    private static HttpResponseMessage Stored() => Json(
+        """
+        {
+          "success": true,
+          "data": {
+            "id": "af0e2077-aab0-4425-a3d3-e1d75e0b6fd5",
+            "title": "Reunión",
+            "description": null,
+            "start": "2026-09-08T15:00:00Z",
+            "end": "2026-09-08T16:00:00Z",
+            "createdAt": "2026-09-08T12:00:00Z"
+          },
+          "error": null
+        }
+        """);
+
+    private static EventRequest Payload() => new()
+    {
+        Title = "Reunión",
+        Start = new DateTime(2026, 9, 8, 15, 0, 0, DateTimeKind.Utc),
+        End = new DateTime(2026, 9, 8, 16, 0, 0, DateTimeKind.Utc),
+    };
+
+    [Fact]
+    public async Task CreateEvent_ReturnsTheStoredEvent()
+    {
+        // Arrange
+        var handler = new ScriptedHandler(Stored);
+
+        // Act
+        var result = await Create(handler).CreateEventAsync(Payload(), CancellationToken.None);
+
+        // Assert
+        Assert.True(result.Succeeded);
+        Assert.Equal("Reunión", result.Data!.Title);
+        Assert.Equal("/events", handler.LastUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async Task CreateEvent_ReportsARefusal()
+    {
+        // Arrange
+        var body = $$"""
+            { "success": false, "data": null, "error": "{{ApiErrorCodes.EventTitleRequired}}" }
+            """;
+
+        // Act
+        var result = await Create(new ScriptedHandler(() => Json(body)))
+            .CreateEventAsync(Payload(), CancellationToken.None);
+
+        // Assert
+        Assert.False(result.Succeeded);
+        Assert.False(result.IsUnreachable);
+        Assert.Equal(ApiErrorCodes.EventTitleRequired, result.ErrorCode);
+    }
+
+    [Fact]
+    public async Task UpdateEvent_AddressesTheEventBeingChanged()
+    {
+        // Arrange
+        var handler = new ScriptedHandler(Stored);
+        var id = Guid.NewGuid();
+
+        // Act
+        var result = await Create(handler).UpdateEventAsync(id, Payload(), CancellationToken.None);
+
+        // Assert
+        Assert.True(result.Succeeded);
+        Assert.Equal($"/events/{id}", handler.LastUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async Task DeleteEvent_SucceedsOnTheEmptyEnvelope()
+    {
+        // Arrange: delete answers with the envelope and no payload.
+        var handler = new ScriptedHandler(
+            () => Json("""{ "success": true, "data": null, "error": null }"""));
+        var id = Guid.NewGuid();
+
+        // Act
+        var result = await Create(handler).DeleteEventAsync(id, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.Succeeded);
+        Assert.Equal($"/events/{id}", handler.LastUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async Task DeleteEvent_ReportsAnEventThatIsNoLongerThere()
+    {
+        // Arrange
+        var body = $$"""
+            { "success": false, "data": null, "error": "{{ApiErrorCodes.EventNotFound}}" }
+            """;
+
+        // Act
+        var result = await Create(new ScriptedHandler(() => Json(body)))
+            .DeleteEventAsync(Guid.NewGuid(), CancellationToken.None);
+
+        // Assert
+        Assert.Equal(ApiErrorCodes.EventNotFound, result.ErrorCode);
+    }
+
+    /// <summary>
+    /// A request that has been sent cannot be sent again, so the retry has to build a fresh one.
+    /// </summary>
+    [Fact]
+    public async Task CreateEvent_TriesAgain_WhenTheFirstAttemptTimesOut()
+    {
+        // Arrange
+        var handler = new ScriptedHandler(
+            () => throw new TaskCanceledException(),
+            Stored);
+
+        // Act
+        var result = await Create(handler).CreateEventAsync(Payload(), CancellationToken.None);
+
+        // Assert
+        Assert.True(result.Succeeded);
+        Assert.Equal(2, handler.Calls);
+    }
 }

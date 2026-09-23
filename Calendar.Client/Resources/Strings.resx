@@ -159,4 +159,53 @@
     <value>Reintentar</value>
     <comment>Retries the fetch after a connection failure.</comment>
   </data>
+  <data name="ActionCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ActionConfirmDelete" xml:space="preserve">
+    <value>Sí, eliminar</value>
+  </data>
+  <data name="ActionDelete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="ActionEdit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="ActionKeep" xml:space="preserve">
+    <value>Conservar</value>
+  </data>
+  <data name="ActionNewEvent" xml:space="preserve">
+    <value>Nuevo evento</value>
+  </data>
+  <data name="ActionSave" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="DayPanelEmpty" xml:space="preserve">
+    <value>No hay eventos este día.</value>
+  </data>
+  <data name="DeleteConfirmFormat" xml:space="preserve">
+    <value>¿Eliminar «{0}»? No se puede deshacer.</value>
+    <comment>Asked before removing an event; {0} is its title.</comment>
+  </data>
+  <data name="FieldDescription" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="FieldEnd" xml:space="preserve">
+    <value>Fin</value>
+  </data>
+  <data name="FieldStart" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="FieldTitle" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="FormTitleEdit" xml:space="preserve">
+    <value>Editar evento</value>
+  </data>
+  <data name="FormTitleNew" xml:space="preserve">
+    <value>Nuevo evento</value>
+  </data>
+  <data name="TooltipCloseDay" xml:space="preserve">
+    <value>Cerrar el panel del día</value>
+  </data>
 </root>

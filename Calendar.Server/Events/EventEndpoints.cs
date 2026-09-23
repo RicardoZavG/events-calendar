@@ -59,8 +59,8 @@ public static class EventEndpoints
         }
 
         var events = await repository.FindInRangeAsync(
-            EventValidator.ToUtc(from.Value),
-            EventValidator.ToUtc(to.Value),
+            EventValidation.ToUtc(from.Value),
+            EventValidation.ToUtc(to.Value),
             cancellationToken);
 
         return Results.Ok(ApiResponse<IReadOnlyList<Event>>.Ok(events));
@@ -99,7 +99,7 @@ public static class EventEndpoints
         IEventRepository repository,
         CancellationToken cancellationToken)
     {
-        var error = EventValidator.Validate(request);
+        var error = EventValidation.Validate(request);
 
         if (error is not null)
         {
@@ -112,8 +112,8 @@ public static class EventEndpoints
             Id = Guid.NewGuid(),
             Title = request!.Title!.Trim(),
             Description = request.Description?.Trim(),
-            Start = EventValidator.ToUtc(request.Start!.Value),
-            End = EventValidator.ToUtc(request.End!.Value),
+            Start = EventValidation.ToUtc(request.Start!.Value),
+            End = EventValidation.ToUtc(request.End!.Value),
             CreatedAt = DateTime.UtcNow,
         };
 
@@ -137,7 +137,7 @@ public static class EventEndpoints
         IEventRepository repository,
         CancellationToken cancellationToken)
     {
-        var error = EventValidator.Validate(request);
+        var error = EventValidation.Validate(request);
 
         if (error is not null)
         {
@@ -157,8 +157,8 @@ public static class EventEndpoints
         {
             Title = request!.Title!.Trim(),
             Description = request.Description?.Trim(),
-            Start = EventValidator.ToUtc(request.Start!.Value),
-            End = EventValidator.ToUtc(request.End!.Value),
+            Start = EventValidation.ToUtc(request.Start!.Value),
+            End = EventValidation.ToUtc(request.End!.Value),
         };
 
         await repository.UpdateAsync(updated, cancellationToken);

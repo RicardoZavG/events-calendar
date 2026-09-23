@@ -29,6 +29,13 @@
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
             <SolidColorBrush x:Key="HeaderBandBrush" Color="#174EA6" />
             <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
+            <!--
+                The veil behind the day panel. Its name is the framework's, not ours: the
+                control resolves this exact key, and a resource dictionary offers no way to
+                alias one entry to another. The default is far too pale to read as "this is
+                blocked".
+            -->
+            <SolidColorBrush x:Key="SplitViewLightDismissOverlayBackground" Color="#66000000" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.GreenVariantKey}">
@@ -43,6 +50,13 @@
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
             <SolidColorBrush x:Key="HeaderBandBrush" Color="#146C2E" />
             <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
+            <!--
+                The veil behind the day panel. Its name is the framework's, not ours: the
+                control resolves this exact key, and a resource dictionary offers no way to
+                alias one entry to another. The default is far too pale to read as "this is
+                blocked".
+            -->
+            <SolidColorBrush x:Key="SplitViewLightDismissOverlayBackground" Color="#66000000" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="{x:Static themes:AppThemes.VioletVariantKey}">
@@ -57,6 +71,13 @@
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
             <SolidColorBrush x:Key="HeaderBandBrush" Color="#4B2E93" />
             <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#FFFFFF" />
+            <!--
+                The veil behind the day panel. Its name is the framework's, not ours: the
+                control resolves this exact key, and a resource dictionary offers no way to
+                alias one entry to another. The default is far too pale to read as "this is
+                blocked".
+            -->
+            <SolidColorBrush x:Key="SplitViewLightDismissOverlayBackground" Color="#66000000" />
         </ResourceDictionary>
 
         <!--
@@ -81,6 +102,11 @@
             <SolidColorBrush x:Key="AccentForegroundBrush" Color="#202124" />
             <SolidColorBrush x:Key="HeaderBandBrush" Color="#202124" />
             <SolidColorBrush x:Key="HeaderBandForegroundBrush" Color="#9AA0A6" />
+            <!--
+                Stronger than the light themes use. A veil that works over white is almost
+                invisible over near-black, and the point of it is to be noticed.
+            -->
+            <SolidColorBrush x:Key="SplitViewLightDismissOverlayBackground" Color="#A6000000" />
         </ResourceDictionary>
 
     </ResourceDictionary.ThemeDictionaries>

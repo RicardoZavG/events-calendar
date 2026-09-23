@@ -65,6 +65,13 @@
     <x:Double x:Key="ThemeSwatchSize">20</x:Double>
     <Thickness x:Key="SectionPadding">24</Thickness>
 
+    <!--
+        The day panel. Wide enough for a date picker plus the section padding on both sides:
+        that control asks for nearly three hundred pixels on its own, and anything narrower
+        clips it without saying so.
+    -->
+    <x:Double x:Key="DayPanelWidth">360</x:Double>
+
     <!-- Event chips and the connection banner -->
     <Thickness x:Key="EventChipPadding">4,1</Thickness>
     <Thickness x:Key="BannerPadding">16,8</Thickness>

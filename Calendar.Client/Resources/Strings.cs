@@ -81,6 +81,38 @@ public static class Strings
 
     public static string ActionRetry => Get(nameof(ActionRetry));
 
+    public static string ActionCancel => Get(nameof(ActionCancel));
+
+    public static string ActionConfirmDelete => Get(nameof(ActionConfirmDelete));
+
+    public static string ActionDelete => Get(nameof(ActionDelete));
+
+    public static string ActionEdit => Get(nameof(ActionEdit));
+
+    public static string ActionKeep => Get(nameof(ActionKeep));
+
+    public static string ActionNewEvent => Get(nameof(ActionNewEvent));
+
+    public static string ActionSave => Get(nameof(ActionSave));
+
+    public static string DayPanelEmpty => Get(nameof(DayPanelEmpty));
+
+    public static string DeleteConfirmFormat => Get(nameof(DeleteConfirmFormat));
+
+    public static string FieldDescription => Get(nameof(FieldDescription));
+
+    public static string FieldEnd => Get(nameof(FieldEnd));
+
+    public static string FieldStart => Get(nameof(FieldStart));
+
+    public static string FieldTitle => Get(nameof(FieldTitle));
+
+    public static string FormTitleEdit => Get(nameof(FormTitleEdit));
+
+    public static string FormTitleNew => Get(nameof(FormTitleNew));
+
+    public static string TooltipCloseDay => Get(nameof(TooltipCloseDay));
+
     /// <summary>Reads one entry from the resource file.</summary>
     /// <param name="key">Resource key, always the name of the calling property.</param>
     /// <returns>

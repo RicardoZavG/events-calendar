@@ -1,23 +1,24 @@
-using Calendar.Shared.Contracts;
+using System;
 
-namespace Calendar.Server.Events;
+namespace Calendar.Shared.Contracts;
 
 /// <summary>
-/// Checks an incoming event payload before anything is stored.
+/// The rules an event has to satisfy, shared by both sides.
 /// </summary>
 /// <remarks>
-/// Data arriving over the network is untrusted, whatever sent it. Every field is checked here
-/// so a bad request is rejected with a reason the caller can act on, rather than surfacing as a
-/// database error later.
+/// Defined once and called twice. The client checks before sending, because a round trip to be
+/// told the title is empty is wasted; the server checks again because it is the boundary and
+/// this client is not the only thing that can reach it. Two copies of these rules would drift,
+/// and the drift would show up as a request the client swore was fine being refused.
 /// </remarks>
-public static class EventValidator
+public static class EventValidation
 {
     /// <summary>Validates a create or update payload.</summary>
-    /// <param name="request">The body as received; may be missing fields entirely.</param>
+    /// <param name="request">The payload; may be null or missing fields entirely.</param>
     /// <returns>
     /// <c>null</c> when the payload is usable, otherwise the <see cref="ApiErrorCodes"/> entry
-    /// naming why it was rejected. A code rather than a sentence: the server does not know what
-    /// language the person in front of the client reads.
+    /// naming why it was rejected. A code rather than a sentence: the wording belongs to
+    /// whoever displays it.
     /// </returns>
     public static string? Validate(EventRequest? request)
     {

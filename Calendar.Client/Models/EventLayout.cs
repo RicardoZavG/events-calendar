@@ -72,6 +72,22 @@ public static class EventLayout
             .ToList();
     }
 
+    /// <summary>Whether an event occupies a given day.</summary>
+    /// <param name="item">The event, with its instants in UTC.</param>
+    /// <param name="day">The day being asked about.</param>
+    /// <param name="timeZone">The zone the day is read in.</param>
+    /// <returns>
+    /// <c>true</c> when the event starts on that day or runs through it. Shared with the grid
+    /// so the panel for a day never disagrees with the chips drawn on it.
+    /// </returns>
+    public static bool Covers(Event item, DateOnly day, TimeZoneInfo timeZone)
+    {
+        var start = ToZone(item.Start, timeZone);
+        var firstDay = DateOnly.FromDateTime(start);
+
+        return day >= firstDay && day <= LastCoveredDay(firstDay, ToZone(item.End, timeZone));
+    }
+
     /// <summary>Converts an instant to the zone the calendar is read in.</summary>
     /// <param name="value">The instant, stored in UTC.</param>
     /// <param name="timeZone">The zone to read it in.</param>

@@ -6,6 +6,7 @@
              xmlns:vm="using:Calendar.Client.ViewModels"
              xmlns:models="using:Calendar.Client.Models"
              xmlns:res="using:Calendar.Client.Resources"
+             xmlns:views="using:Calendar.Client.Views"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="680"
              x:Class="Calendar.Client.Views.CalendarView"
@@ -14,6 +15,11 @@
     <Design.DataContext>
         <vm:CalendarViewModel />
     </Design.DataContext>
+
+    <!-- What every other modal on the desktop does. -->
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding CloseDayCommand}" />
+    </UserControl.KeyBindings>
 
     <!--
         No colour, size or text is written literally here. Shared appearances come from
@@ -65,6 +71,32 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
+        <!--
+            The day cell is a button: it opens the day panel. Its chrome is stripped so it
+            still looks like a cell, and its hover is left to the border inside, which already
+            paints the whole cell.
+        -->
+        <Style Selector="Button.dayCellButton">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button.dayCellButton /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Button.dayCellButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="Button.dayCellButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
         <!-- Event chips -->
         <Style Selector="Border.eventChip">
             <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
@@ -106,6 +138,25 @@
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
     </UserControl.Styles>
+
+    <!--
+        The day panel floats over the calendar instead of squeezing it. UseLightDismissOverlayMode
+        is what dims the grid behind and closes the panel on a click outside it: while it is open
+        the calendar is there to be read, not to be used.
+
+        The cost is deliberate — clicking another day now closes the panel rather than moving it
+        to that day. A panel that blocks what is behind it should not also let you operate it.
+    -->
+    <SplitView DisplayMode="Overlay"
+               PanePlacement="Right"
+               UseLightDismissOverlayMode="True"
+               IsPaneOpen="{Binding IsDayPanelOpen, Mode=TwoWay}"
+               OpenPaneLength="{DynamicResource DayPanelWidth}"
+               PaneBackground="{DynamicResource SurfaceBrush}">
+
+        <SplitView.Pane>
+            <views:DayPanelView DataContext="{Binding SelectedDay}" />
+        </SplitView.Pane>
 
     <Grid RowDefinitions="Auto,Auto,Auto,*" Background="{DynamicResource SurfaceBrush}">
 
@@ -201,7 +252,10 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:CalendarDay">
-                    <Border Classes="dayCell" Classes.outside="{Binding !IsInCurrentMonth}">
+                    <Button Classes="dayCellButton"
+                            Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).SelectDayCommand}"
+                            CommandParameter="{Binding}">
+                      <Border Classes="dayCell" Classes.outside="{Binding !IsInCurrentMonth}">
                         <StackPanel Spacing="{DynamicResource SpacingSm}">
                             <Border Classes="dayBadge" Classes.today="{Binding IsToday}">
                                 <TextBlock Classes="body dayNumber" Text="{Binding DayNumber}" />
@@ -220,18 +274,16 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="models:EventChip">
+                                            <!--
+                                                Title only. At seven columns wide the time left
+                                                nothing legible beside it, and the day panel now
+                                                shows the real times; the tooltip still carries
+                                                it for a quick look.
+                                            -->
                                             <Border Classes="eventChip"
                                                     Classes.continuation="{Binding IsContinuation}"
-                                                    ToolTip.Tip="{Binding Title}">
-                                                <StackPanel Orientation="Horizontal"
-                                                            Spacing="{DynamicResource SpacingSm}">
-                                                    <TextBlock Classes="eventTime"
-                                                               Text="{Binding TimeLabel}"
-                                                               IsVisible="{Binding TimeLabel,
-                                                                   Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                                    <TextBlock Classes="eventTitle"
-                                                               Text="{Binding Title}" />
-                                                </StackPanel>
+                                                    ToolTip.Tip="{Binding Tooltip}">
+                                                <TextBlock Classes="eventTitle" Text="{Binding Title}" />
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -242,9 +294,11 @@
                                            IsVisible="{Binding HasHiddenEvents}" />
                             </StackPanel>
                         </StackPanel>
-                    </Border>
+                      </Border>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Grid>
+    </SplitView>
 </UserControl>

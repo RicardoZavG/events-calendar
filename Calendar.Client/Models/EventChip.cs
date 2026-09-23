@@ -22,7 +22,15 @@ public sealed record EventChip
     /// Start time, on the day the event begins; <c>null</c> on the days it merely continues
     /// through, where repeating a time that already passed would be misleading.
     /// </summary>
+    /// <remarks>
+    /// Not drawn in the cell. At seven columns wide a Spanish time takes eleven characters and
+    /// leaves the title unreadable, and the day panel shows the real times anyway. It survives
+    /// here because the tooltip is built from it.
+    /// </remarks>
     public string? TimeLabel { get; init; }
+
+    /// <summary>What the chip says on hover: the time, when there is one, and the title.</summary>
+    public string Tooltip => TimeLabel is null ? Title : $"{TimeLabel} — {Title}";
 
     /// <summary>Whether this day is one the event runs through rather than starts on.</summary>
     public required bool IsContinuation { get; init; }

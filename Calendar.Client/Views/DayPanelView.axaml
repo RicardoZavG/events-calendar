@@ -1,0 +1,180 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Calendar.Client.ViewModels"
+             xmlns:models="using:Calendar.Client.Models"
+             xmlns:res="using:Calendar.Client.Resources"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="320" d:DesignHeight="680"
+             x:Class="Calendar.Client.Views.DayPanelView"
+             x:DataType="vm:DayPanelViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Border.eventRow">
+            <Setter Property="Background" Value="{DynamicResource ControlBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}" />
+            <Setter Property="Padding" Value="{DynamicResource InsetMd}" />
+        </Style>
+
+        <Style Selector="TextBlock.fieldLabel">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeCaption}" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.errorText">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeCaption}" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="{DynamicResource SurfaceBrush}"
+            BorderBrush="{DynamicResource GridLineBrush}"
+            BorderThickness="1,0,0,0">
+        <Grid RowDefinitions="Auto,*">
+
+            <!-- Header: the day written out, and the way back to the grid alone -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto"
+                  Margin="{DynamicResource HeaderMargin}">
+                <TextBlock Grid.Column="0" Classes="h4" Text="{Binding Title}"
+                           TextWrapping="Wrap" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Classes="round sm"
+                        Command="{Binding CloseCommand}"
+                        ToolTip.Tip="{x:Static res:Strings.TooltipCloseDay}">
+                    <materialIcons:MaterialIcon Kind="Close" Classes="sm" />
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1">
+                <StackPanel Margin="{DynamicResource SectionPadding}"
+                            Spacing="{DynamicResource SpacingLg}">
+
+                    <!-- ===== The list of what is on this day ===== -->
+                    <StackPanel Spacing="{DynamicResource SpacingMd}"
+                                IsVisible="{Binding !IsEditing}">
+
+                        <TextBlock Classes="caption"
+                                   Text="{x:Static res:Strings.DayPanelEmpty}"
+                                   IsVisible="{Binding IsEmpty}" />
+
+                        <ItemsControl ItemsSource="{Binding Events}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Spacing="{DynamicResource SpacingMd}" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:DayEvent">
+                                    <Border Classes="eventRow">
+                                        <StackPanel Spacing="{DynamicResource SpacingSm}">
+                                            <TextBlock Classes="caption" Text="{Binding TimeRange}" />
+                                            <TextBlock Classes="body" Text="{Binding Title}"
+                                                       FontWeight="SemiBold" TextWrapping="Wrap" />
+                                            <TextBlock Classes="caption" Text="{Binding Description}"
+                                                       TextWrapping="Wrap"
+                                                       IsVisible="{Binding HasDescription}" />
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="{DynamicResource SpacingMd}">
+                                                <Button Classes="action sm"
+                                                        Content="{x:Static res:Strings.ActionEdit}"
+                                                        Command="{Binding $parent[ItemsControl].((vm:DayPanelViewModel)DataContext).EditCommand}"
+                                                        CommandParameter="{Binding}" />
+                                                <Button Classes="action sm"
+                                                        Content="{x:Static res:Strings.ActionDelete}"
+                                                        Command="{Binding $parent[ItemsControl].((vm:DayPanelViewModel)DataContext).AskDeleteCommand}"
+                                                        CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Classes="action"
+                                Content="{x:Static res:Strings.ActionNewEvent}"
+                                Command="{Binding NewCommand}"
+                                HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- ===== Confirming a deletion ===== -->
+                    <!--
+                        Asked in place rather than in a dialog: the row being removed stays on
+                        screen behind the question, so there is no doubt about which one it is.
+                    -->
+                    <StackPanel Spacing="{DynamicResource SpacingMd}"
+                                IsVisible="{Binding IsConfirmingDelete}">
+                        <TextBlock Classes="body" TextWrapping="Wrap"
+                                   Text="{Binding PendingDelete.Title}" />
+                        <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingMd}">
+                            <Button Classes="action"
+                                    Content="{x:Static res:Strings.ActionConfirmDelete}"
+                                    Command="{Binding ConfirmDeleteCommand}"
+                                    IsEnabled="{Binding !IsBusy}" />
+                            <Button Classes="action"
+                                    Content="{x:Static res:Strings.ActionKeep}"
+                                    Command="{Binding CancelDeleteCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- ===== The form ===== -->
+                    <StackPanel Spacing="{DynamicResource SpacingMd}"
+                                IsVisible="{Binding IsEditing}">
+
+                        <TextBlock Classes="h5" Text="{x:Static res:Strings.FormTitleNew}"
+                                   IsVisible="{Binding IsCreating}" />
+                        <TextBlock Classes="h5" Text="{x:Static res:Strings.FormTitleEdit}"
+                                   IsVisible="{Binding !IsCreating}" />
+
+                        <TextBlock Classes="fieldLabel" Text="{x:Static res:Strings.FieldTitle}" />
+                        <TextBox Text="{Binding DraftTitle, Mode=TwoWay}" />
+
+                        <TextBlock Classes="fieldLabel" Text="{x:Static res:Strings.FieldDescription}" />
+                        <TextBox Text="{Binding DraftDescription, Mode=TwoWay}"
+                                 AcceptsReturn="True" TextWrapping="Wrap"
+                                 MinHeight="{DynamicResource EventAreaMinHeight}" />
+
+                        <!--
+                            The date and the time are stacked, not side by side. Avalonia's date
+                            picker alone asks for nearly three hundred pixels; beside it the time
+                            picker was pushed off the panel entirely and the hours looked as if
+                            they had never been implemented.
+                        -->
+                        <TextBlock Classes="fieldLabel" Text="{x:Static res:Strings.FieldStart}" />
+                        <StackPanel Spacing="{DynamicResource SpacingSm}">
+                            <DatePicker SelectedDate="{Binding DraftStartDate, Mode=TwoWay}"
+                                        HorizontalAlignment="Stretch" />
+                            <TimePicker SelectedTime="{Binding DraftStartTime, Mode=TwoWay}"
+                                        HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <TextBlock Classes="fieldLabel" Text="{x:Static res:Strings.FieldEnd}" />
+                        <StackPanel Spacing="{DynamicResource SpacingSm}">
+                            <DatePicker SelectedDate="{Binding DraftEndDate, Mode=TwoWay}"
+                                        HorizontalAlignment="Stretch" />
+                            <TimePicker SelectedTime="{Binding DraftEndTime, Mode=TwoWay}"
+                                        HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <TextBlock Classes="errorText" Text="{Binding ErrorMessage}"
+                                   IsVisible="{Binding ErrorMessage,
+                                       Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+                        <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingMd}">
+                            <Button Classes="action"
+                                    Content="{x:Static res:Strings.ActionSave}"
+                                    Command="{Binding SaveCommand}"
+                                    IsEnabled="{Binding !IsBusy}" />
+                            <Button Classes="action"
+                                    Content="{x:Static res:Strings.ActionCancel}"
+                                    Command="{Binding CancelCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

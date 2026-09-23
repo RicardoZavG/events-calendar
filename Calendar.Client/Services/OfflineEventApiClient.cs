@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Calendar.Shared.Contracts;
 using Calendar.Shared.Models;
 
 namespace Calendar.Client.Services;
@@ -20,9 +21,26 @@ public sealed class OfflineEventApiClient : IEventApiClient
     public Task<ApiResult<IReadOnlyList<Event>>> GetEventsAsync(
         DateTime fromUtc,
         DateTime toUtc,
-        CancellationToken cancellationToken)
-    {
-        return Task.FromResult(
-            ApiResult<IReadOnlyList<Event>>.Unreachable(ClientErrorCodes.ServerUnreachable));
-    }
+        CancellationToken cancellationToken) => Unreachable<IReadOnlyList<Event>>();
+
+    /// <inheritdoc />
+    public Task<ApiResult<Event>> CreateEventAsync(
+        EventRequest request,
+        CancellationToken cancellationToken) => Unreachable<Event>();
+
+    /// <inheritdoc />
+    public Task<ApiResult<Event>> UpdateEventAsync(
+        Guid id,
+        EventRequest request,
+        CancellationToken cancellationToken) => Unreachable<Event>();
+
+    /// <inheritdoc />
+    public Task<ApiResult<bool>> DeleteEventAsync(
+        Guid id,
+        CancellationToken cancellationToken) => Unreachable<bool>();
+
+    /// <summary>The one answer this client ever gives.</summary>
+    /// <typeparam name="T">Payload the caller expected.</typeparam>
+    private static Task<ApiResult<T>> Unreachable<T>() =>
+        Task.FromResult(ApiResult<T>.Unreachable(ClientErrorCodes.ServerUnreachable));
 }

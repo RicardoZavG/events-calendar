@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Calendar.Client.Models;
+using System.Linq;
 using Calendar.Client.Services;
+using Calendar.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -29,10 +31,11 @@ public partial class CalendarViewModel : ViewModelBase
     private static readonly DateOnly MaxMonth = new(MaxYear, 12, 1);
 
     private readonly DateOnly _today;
-    private readonly IEventApiClient _events;
+    private readonly IEventApiClient _api;
     private readonly TimeZoneInfo _timeZone;
 
     private CancellationTokenSource? _loading;
+    private IReadOnlyList<Event> _loaded = [];
 
     /// <summary>
     /// First day of the month on screen. Every other piece of displayed state derives from it.
@@ -58,6 +61,14 @@ public partial class CalendarViewModel : ViewModelBase
     /// </remarks>
     [ObservableProperty]
     private DateTimeOffset? _selectedDate;
+
+    /// <summary>
+    /// The day whose panel is open; <c>null</c> when none is. Replaced rather than mutated, so
+    /// opening another day cannot leave a half-finished form behind.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDayPanelOpen))]
+    private DayPanelViewModel? _selectedDay;
 
     /// <summary>Whether the events of the displayed month are being fetched.</summary>
     [ObservableProperty]
@@ -99,7 +110,7 @@ public partial class CalendarViewModel : ViewModelBase
     /// </param>
     public CalendarViewModel(IEventApiClient events, DateOnly today, TimeZoneInfo timeZone)
     {
-        _events = events;
+        _api = events;
         _today = today;
         _timeZone = timeZone;
         DisplayedMonth = FirstDayOf(today);
@@ -111,6 +122,25 @@ public partial class CalendarViewModel : ViewModelBase
 
     /// <summary>Whether there is something to tell the user about the connection.</summary>
     public bool HasProblem => ProblemMessage is not null;
+
+    /// <summary>Whether a day panel is open over the grid.</summary>
+    /// <remarks>
+    /// Settable so the control can report a dismissal it handled itself — clicking the dimmed
+    /// calendar behind the panel closes it, and the view model has to hear about it or the two
+    /// would disagree. Only closing arrives this way: opening needs a day, which the control
+    /// has no way of choosing.
+    /// </remarks>
+    public bool IsDayPanelOpen
+    {
+        get => SelectedDay is not null;
+        set
+        {
+            if (!value)
+            {
+                SelectedDay = null;
+            }
+        }
+    }
 
     /// <summary>
     /// The displayed month, e.g. "September", in the current culture. The year is deliberately
@@ -159,7 +189,7 @@ public partial class CalendarViewModel : ViewModelBase
 
         try
         {
-            var result = await _events.GetEventsAsync(from, to, current.Token);
+            var result = await _api.GetEventsAsync(from, to, current.Token);
 
             if (current.IsCancellationRequested)
             {
@@ -168,7 +198,8 @@ public partial class CalendarViewModel : ViewModelBase
 
             if (result.Succeeded)
             {
-                Days = EventLayout.Distribute(Days, result.Data!, _timeZone);
+                _loaded = result.Data!;
+                Days = EventLayout.Distribute(Days, _loaded, _timeZone);
                 ProblemMessage = null;
                 return;
             }
@@ -183,6 +214,39 @@ public partial class CalendarViewModel : ViewModelBase
             }
         }
     }
+
+    /// <summary>Opens the panel for a day.</summary>
+    /// <param name="day">The cell that was clicked.</param>
+    [RelayCommand]
+    private void SelectDay(CalendarDay day)
+    {
+        var panel = new DayPanelViewModel(day.Date, _api, _timeZone, RefreshAsync, CloseDay);
+        panel.Show(EventsOn(day.Date));
+        SelectedDay = panel;
+    }
+
+    /// <summary>Closes the day panel.</summary>
+    [RelayCommand]
+    private void CloseDay() => SelectedDay = null;
+
+    /// <summary>Reloads the month and re-fills the open panel from the new answer.</summary>
+    /// <returns>A task that completes once both agree again.</returns>
+    /// <remarks>
+    /// Handed to the panel so that anything it changes is reflected in the grid behind it. The
+    /// panel deliberately does not keep its own copy of the events: one source, one truth.
+    /// </remarks>
+    private async Task RefreshAsync()
+    {
+        await ReloadAsync();
+
+        SelectedDay?.Show(EventsOn(SelectedDay.Date));
+    }
+
+    /// <summary>The events of the last answer that occupy a given day.</summary>
+    /// <param name="day">The day being asked about.</param>
+    /// <returns>Every event covering it, including ones that started earlier.</returns>
+    private IReadOnlyList<Event> EventsOn(DateOnly day) =>
+        _loaded.Where(item => EventLayout.Covers(item, day, _timeZone)).ToList();
 
     /// <summary>Moves one month back.</summary>
     [RelayCommand(CanExecute = nameof(CanGoToPreviousMonth))]
@@ -209,6 +273,9 @@ public partial class CalendarViewModel : ViewModelBase
     {
         Days = MonthGrid.Build(value.Year, value.Month, _today, WeekStart);
         AlignPickerTo(value);
+
+        // The open panel belongs to a day that is no longer on screen.
+        SelectedDay = null;
 
         // Deliberately not awaited: navigation stays responsive and the grid is already on
         // screen. Failures are reported through ProblemMessage, never thrown.
